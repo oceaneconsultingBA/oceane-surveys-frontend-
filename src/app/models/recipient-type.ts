@@ -1,5 +1,6 @@
 export enum RecipientType {
-    CONSULTANT = 'CONSULTANT',
-    CLIENT = 'CLIENT',
-    MANAGER = 'MANAGER'
+    CONSULTANT = 'Consultant',
+    CLIENT = 'Client',
+    FREELANCE = 'Freelance',
+    AUTRE = 'Autre'
 }
