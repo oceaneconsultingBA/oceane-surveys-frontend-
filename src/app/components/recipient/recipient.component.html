@@ -5,7 +5,8 @@
             <p-button label="Nouveau" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
         </ng-template>
         <ng-template #end>
-            <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" auto customUpload class="mr-2 inline-block" [chooseButtonProps]="{ severity: 'secondary' }" />
+            <p-fileUpload mode="basic" accept=".xls, .xlsx" (onSelect)="onFileSelect($event)" customUpload="true" 
+             [maxFileSize]="1000000" label="Import" chooseLabel="Import" auto customUpload class="mr-2 inline-block"  />
             <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
         </ng-template>
     </p-toolbar>
@@ -14,7 +15,7 @@
     [value]="recepients" 
     [tableStyle]="{ 'min-width': '50rem' }" 
     tableStyleClass="p-datatable-striped" 
-    [rows]="3"  
+    [rows]="20"  
     [columns]="cols"
     [paginator]="true"
     [globalFilterFields]="['firstName', 'lastName', 'company', 'type']"
@@ -46,7 +47,7 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="recepientDialog" [style]="{ width: '450px' }"  [header]="modalMode === 'CREATE' ? 'Création'+ ' d\'un destinataire' : 'Modification' + ' d\'un destinataire'" [modal]="true">
+<p-dialog [(visible)]="recepientDialog" [style]="{ width: '450px' }"  [appendTo]="'body'" [header]="modalMode === 'CREATE' ? 'Création'+ ' d\'un destinataire' : 'Modification' + ' d\'un destinataire'" [modal]="true">
     <ng-template #content>
         <form [formGroup]="recipientForm" (ngSubmit)="onSubmit()"> 
             <div>
@@ -68,8 +69,8 @@
             <div>
                 <label for="type" class="block font-bold mb-3">Type</label>
                 <p-dropdown id="type" [options]="recipientTypes" formControlName="type" placeholder="Sélectionner un type" required autofocus fluid></p-dropdown>
-            </div><br/><br/>
-            <button pButton type="submit"  [label]="modalMode === 'CREATE' ? 'Créer' : 'Éditer'" class="p-button-success"></button>
+            </div><br/>
+            <button pButton type="submit"  [label]="modalMode === 'CREATE' ? 'Créer' : 'Éditer'" class="p-button-success" style="margin-top: 75px;"></button>
         </form>        
     </ng-template>
 </p-dialog>

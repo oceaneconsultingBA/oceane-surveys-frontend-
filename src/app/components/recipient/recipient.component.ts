@@ -16,8 +16,11 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RecipientService } from '../../services/recipient-service.service';
 import { MessageService } from 'primeng/api';
 import { Recipient } from '../../models/recipient';
+import { Column } from '../../models/Column';
+import { ExportColumn } from '../../models/ExportColumn';
 import { RecipientType } from '../../models/recipient-type';
-import { FileUploadModule  } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-recipient',
@@ -107,7 +110,7 @@ export class RecipientComponent implements OnInit {
   }
 
   // Créer un nouveau recipient
-  createRecipient(recipient: Recipient) {
+  private createRecipient(recipient: Recipient) {
     this.recipientService.createRecipient(recipient).subscribe({
       next: (newRecipient: any) => {
         console.log('Recipient créé avec succès :', newRecipient);
@@ -122,7 +125,7 @@ export class RecipientComponent implements OnInit {
   }
 
   // Modifier un recipient existant
-  editeRecipient(recipient: Recipient) {
+  private editeRecipient(recipient: Recipient) {
     this.recipientService.updateRecipient(recipient.id, recipient).subscribe({
       next: (newRecipient: any) => {
         console.log('Recipient mis à jour avec succès :', newRecipient);
@@ -141,6 +144,7 @@ export class RecipientComponent implements OnInit {
     this.recepientDialog = true;
     this.submitted = false;
     this.modalMode = "CREATE";
+    this.recipientForm.reset();
   }
 
   // Ouvrir la fenêtre d'édition
@@ -176,16 +180,63 @@ export class RecipientComponent implements OnInit {
   exportCSV() {
     this.dt?.exportCSV();
   }
-}
 
-// Interfaces pour la gestion des colonnes
-interface Column {
-  field: string;
-  header: string;
-  customExportHeader?: string;
-}
+  nextId = 1;
+  expectedColumns = ["firstName", "lastName", "email", "company", "type"];
 
-interface ExportColumn {
-  title: string;
-  dataKey: string;
+  // Traitement du fichier Excel
+  onFileSelect(event: any) {
+    const file = event.files[0]; // Récupérer le fichier sélectionné
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+
+      const sheetName = workbook.SheetNames[0]; // Première feuille du fichier
+      const worksheet = workbook.Sheets[sheetName];
+
+      // Convertir en JSON brut
+      const rawData: any[] = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+
+      // Vérification des colonnes
+      const fileColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
+      if (!this.validateColumns(fileColumns)) {
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Les colonnes du fichier ne correspondent pas à l'ordre attendu : " + this.expectedColumns.join(", ") });
+        return;
+      }
+
+      // Mapper les données pour correspondre au modèle `Recipient`
+      this.recepients = [
+        ...this.recepients, // Conserver les destinataires existants
+        ...rawData.map(row => ({
+          id: this.nextId++, // Générer un ID unique
+          email: row["email"] || "", 
+          firstName: row["firstName"] || undefined, 
+          lastName: row["lastName"] || undefined, 
+          company: row["company"] || undefined,
+          type: this.mapRecipientType(row["type"])
+        }))
+      ];
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  // Vérification des colonnes du fichier
+  private validateColumns(fileColumns: string[]): boolean {
+    return JSON.stringify(fileColumns) === JSON.stringify(this.expectedColumns);
+  }
+
+  // Fonction pour mapper les valeurs Excel au bon type RecipientType
+  private mapRecipientType(value: string): RecipientType {
+    const typeMap: { [key: string]: RecipientType } = {
+      "Consultant": RecipientType.CONSULTANT,
+      "Freelance": RecipientType.FREELANCE,
+      "Client": RecipientType.CLIENT,
+      "Autre": RecipientType.AUTRE
+    };
+    return typeMap[value] || RecipientType.CLIENT; // Valeur par défaut
+  }
 }
