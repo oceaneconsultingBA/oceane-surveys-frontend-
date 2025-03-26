@@ -1,0 +1,75 @@
+<div class="card">
+    <p-toast></p-toast>
+    <p-toolbar styleClass="mb-6">
+        <ng-template #start>
+            <p-button label="Nouveau" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+        </ng-template>
+        <ng-template #end>
+            <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" auto customUpload class="mr-2 inline-block" [chooseButtonProps]="{ severity: 'secondary' }" />
+            <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+        </ng-template>
+    </p-toolbar>
+    <p-table 
+    #dt
+    [value]="recepients" 
+    [tableStyle]="{ 'min-width': '50rem' }" 
+    tableStyleClass="p-datatable-striped" 
+    [rows]="3"  
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['firstName', 'lastName', 'company', 'type']"
+    [rowHover]="true"
+    dataKey="id">
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="firstName">Nom <p-sortIcon field="firstName" /></th>
+                <th pSortableColumn="lastName">Prénom <p-sortIcon field="lastName" /></th>
+                <th>Email</th>
+                <th pSortableColumn="company">Compagnie <p-sortIcon field="company" /></th>
+                <th pSortableColumn="type">Type <p-sortIcon field="type" /></th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rc>
+            <tr>
+                <td>{{ rc.firstName }}</td>
+                <td>{{ rc.lastName }}</td>
+                <td>{{ rc.email }}</td>
+                <td>{{ rc.company }}</td>
+                <td>{{ rc.type }}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editRecepient(rc)" />
+                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteRecepient(rc)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="recepientDialog" [style]="{ width: '450px' }"  [header]="modalMode === 'CREATE' ? 'Création'+ ' d\'un destinataire' : 'Modification' + ' d\'un destinataire'" [modal]="true">
+    <ng-template #content>
+        <form [formGroup]="recipientForm" (ngSubmit)="onSubmit()"> 
+            <div>
+                <label for="firstName" class="block font-bold mb-3">Nom</label>
+                <input type="text" pInputText id="firstName"  formControlName="firstName" required autofocus fluid />
+            </div><br/>
+            <div>
+                <label for="lastName" class="block font-bold mb-3">Prénom</label>
+                <input type="text" pInputText id="lastName"  formControlName="lastName" required autofocus fluid />
+            </div><br/>
+            <div>
+                <label for="email" class="block font-bold mb-3">Email</label>
+                <input type="text" pInputText id="email"  formControlName="email" required autofocus fluid />
+            </div><br/>
+            <div>
+                <label for="company" class="block font-bold mb-3">Entreprise</label>
+                <input type="text" pInputText id="company"  formControlName="company" required autofocus fluid />
+            </div><br/>
+            <div>
+                <label for="type" class="block font-bold mb-3">Type</label>
+                <p-dropdown id="type" [options]="recipientTypes" formControlName="type" placeholder="Sélectionner un type" required autofocus fluid></p-dropdown>
+            </div><br/><br/>
+            <button pButton type="submit"  [label]="modalMode === 'CREATE' ? 'Créer' : 'Éditer'" class="p-button-success"></button>
+        </form>        
+    </ng-template>
+</p-dialog>
