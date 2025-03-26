@@ -1,8 +1,13 @@
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { Recipient } from "../models/recipient";
+
 @Injectable({ providedIn: 'root' })
 export class RecipientService {
   private apiUrl = '/api/recipients';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getRecipients(): Observable<Recipient[]> {
     return this.http.get<Recipient[]>(this.apiUrl);
