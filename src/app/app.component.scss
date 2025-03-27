@@ -70,3 +70,86 @@ mat-sidenav-content {
     padding: 10px;
   }
 }
+
+.logo-container {
+  display: flex; /* Active le mode flexbox */
+  align-items: center; /* Centre verticalement */
+  gap: 10px; /* Espacement entre l'image et le texte */
+}
+
+.logo-container img {
+  width: 100px;
+  height: 50px;
+}
+
+.logo-container span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+
+
+/*
+.sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+}
+
+mat-sidenav {
+  width: 250px;
+}
+
+mat-sidenav-content {
+  padding: 20px;
+  margin-top: 64px;
+}
+
+.content {
+  padding: 16px;
+}
+
+.footer {
+  text-align: center;
+  padding: 16px;
+  background: #f5f5f5;
+}
+
+/// Bouton menu mobile 
+.menu-button {
+  display: none;
+  margin-right: 16px;
+}
+
+// Adaptation mobile 
+@media (max-width: 767px) {
+  .menu-button {
+    display: block;
+  }
+
+  .nav-text {
+    display: inline;
+  }
+}
+
+// Très petits écrans 
+@media (max-width: 480px) {
+  .title {
+    font-size: 14px;
+  }
+
+  .nav-text {
+    display: none;
+  }
+
+  mat-sidenav {
+    width: 80px;
+  }
+}
+
+*/

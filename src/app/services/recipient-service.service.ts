@@ -2,10 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Recipient } from "../models/recipient";
+import { environment } from "../../environnements/environnement";
 
 @Injectable({ providedIn: 'root' })
 export class RecipientService {
-  private apiUrl = '/api/recipients';
+  private apiUrl: string = `${environment.apiBaseUrl}/recipients`;
 
   constructor(private http: HttpClient) { }
 

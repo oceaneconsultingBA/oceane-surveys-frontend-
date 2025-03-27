@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';  // Importer ici
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common'; 
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -18,11 +19,26 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'oceane-surveys-frontend';
-  constructor(private router: Router) {}
-    
-  navigateToCreateSurvey() {
-    this.router.navigate(['survey/create']);
+  @ViewChild('sidenav') sidenav: MatSidenav | undefined;
+  isMobile = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+
+  ngOnInit() {
+    this.checkScreenSize();
+  }
+
+
+  checkScreenSize() {
+    if (typeof window !== 'undefined') { // Vérifie si `window` existe
+      this.isMobile = window.innerWidth < 768;
+      if (!this.isMobile && this.sidenav) {
+        this.sidenav.open();
+      }
+    }
   }
   
 }
