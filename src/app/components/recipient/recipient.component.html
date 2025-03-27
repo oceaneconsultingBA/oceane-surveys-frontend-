@@ -21,6 +21,14 @@
     [globalFilterFields]="['firstName', 'lastName', 'company', 'type']"
     [rowHover]="true"
     dataKey="id">
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="globalSearch($event)" placeholder="Recherche..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
         <ng-template #header>
             <tr>
                 <th pSortableColumn="firstName">Nom <p-sortIcon field="firstName" /></th>

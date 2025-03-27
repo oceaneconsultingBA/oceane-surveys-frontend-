@@ -239,4 +239,9 @@ export class RecipientComponent implements OnInit {
     };
     return typeMap[value] || RecipientType.CLIENT; // Valeur par défaut
   }
+
+  globalSearch(event: Event):void{
+    const target = (event.target as HTMLInputElement);
+    this.dt.filterGlobal(target.value, 'contains');
+  }
 }

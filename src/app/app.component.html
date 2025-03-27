@@ -1,22 +1,30 @@
 <mat-toolbar color="primary" class="header">
-  <span>Oceane Consulting | Plateforme des Enquêtes</span>
+  <button mat-icon-button (click)="sidenav.toggle()" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+   <!-- Logo et nom de l'application -->
+   <div class="logo-container">
+    <img src="/assets/images/logo.png" alt="Logo Oceane Consulting" style="width: 100px;height: 50px;">
+    <span>Oceane consulting | plateforme d'enquêtes</span>
+  </div>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav mode="side" opened>
+  <mat-sidenav #sidenav mode="side" [opened]="!isMobile">
     <mat-nav-list>
       <a mat-list-item routerLink="/dashboard">
-        <mat-icon>dashboard</mat-icon> Tableau de bord
-        
+        <mat-icon>dashboard</mat-icon>
+        <span class="nav-text">Tableau de bord</span>
       </a>
       <a mat-list-item routerLink="/surveys">
-        <mat-icon>assignment</mat-icon> Mes enquêtes
+        <mat-icon>assignment</mat-icon>
+        <span class="nav-text">Mes enquêtes</span>
       </a>
       <a mat-list-item routerLink="/recipients">
-        <mat-icon>group</mat-icon> Destinataires
+        <mat-icon>group</mat-icon>
+        <span class="nav-text">Destinataires</span>
       </a>
     </mat-nav-list>
-
   </mat-sidenav>
 
   <mat-sidenav-content>
