@@ -1,1 +1,50 @@
-<p>question works!</p>
+<div class="question-container">
+  <h3>Ajouter une question</h3>
+
+  <label for="questionType">Type de question*</label>
+  <p-dropdown 
+      id="questionType" 
+      [options]="questionTypes" 
+      [(ngModel)]="questionType" 
+      placeholder="Sélectionner un type">
+  </p-dropdown>
+
+  <label for="questionText">Texte de la question*</label>
+  <p-inputTextarea id="questionText" [(ngModel)]="questionText" rows="2"></p-inputTextarea>
+
+  <div *ngIf="questionType === 'choix-unique' || questionType === 'choix-multiple'">
+      <label>Options de réponse*</label>
+      <p-listbox 
+          [options]="responseOptions" 
+          [(ngModel)]="selectedResponses" 
+          [multiple]="questionType === 'choix-multiple'">
+      </p-listbox>
+
+      <div class="add-option">
+          <p-inputText [(ngModel)]="newOption" placeholder="Ajouter une option..." />
+          <p-button label="Ajouter" icon="pi pi-plus" (click)="addOption()"></p-button>
+      </div>
+
+      <ul>
+          <li *ngFor="let option of responseOptions; let i = index">
+              <span>{{ option }}</span>
+              <p-button icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeOption(i)"></p-button>
+          </li>
+      </ul>
+  </div>
+
+  <div *ngIf="questionType === 'texte'">
+      <label>Réponse :</label>
+      <p-inputTextarea [(ngModel)]="textResponse" rows="2" placeholder="Écrivez votre réponse ici..."></p-inputTextarea>
+  </div>
+
+  <div *ngIf="questionType === 'rating'" class="rating">
+      <label>Note :</label>
+      <p-rating [(ngModel)]="rating"></p-rating>
+  </div>
+
+  <div class="actions">
+      <p-button label="Annuler" class="p-button-secondary"></p-button>
+      <p-button label="Ajouter" class="p-button-primary"></p-button>
+  </div>
+</div>
