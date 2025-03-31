@@ -4,11 +4,14 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { StepsModule } from 'primeng/steps';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { QuestionComponent } from '../question/question.component'; 
+import { DropdownModule } from 'primeng/dropdown';
+import { QuestionComponent } from '../question/question.component';
+import { RecipientComponent } from "../recipient/recipient.component"; 
 
 @Component({
   selector: 'app-survey',
-  imports: [StepsModule, ButtonModule, ReactiveFormsModule, TableModule, CommonModule, QuestionComponent],
+  imports: [StepsModule, ButtonModule, ReactiveFormsModule, TableModule, CommonModule,
+     QuestionComponent, RecipientComponent, DropdownModule],
   templateUrl: './survey.component.html',
   styleUrl: './survey.component.scss'
 })
@@ -17,9 +20,22 @@ export class SurveyComponent {
   surveyForm: FormGroup;
   questions: any[] = [];
 
+  description: string = '';
+  enqueteTypes = [
+    { label: 'Satisfaction Consultant', value: 'satisfaction_consultant' },
+    { label: 'Satisfaction Client', value: 'satisfaction_client' },
+    { label: 'Autre', value: 'autre' }
+  ];
+  frequencies = [
+    { label: 'Mensuelle', value: 'mensuelle' },
+    { label: 'Trimestrielle', value: 'trimestrielle' },
+    { label: 'Annuelle', value: 'annuelle' }
+  ];
+
   steps = [
     { label: 'Informations' },
     { label: 'Questions' },
+    { label: 'Destinataires' },
     { label: 'Validation' }
   ];
 
