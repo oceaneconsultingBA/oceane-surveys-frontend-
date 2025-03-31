@@ -10,11 +10,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common'; 
 import { MatSidenav } from '@angular/material/sidenav';
+import { StepsModule } from 'primeng/steps'; 
+import { TableModule } from 'primeng/table'; 
 
 @Component({
   selector: 'app-root',
   imports: [CommonModule, RouterModule,MatIconModule,MatFormFieldModule,MatSidenavModule,MatToolbarModule,MatListModule, MatInputModule, MatButtonModule,     ReactiveFormsModule, // ✅ Ajout du module pour les Reactive Forms
-    FormsModule],
+    FormsModule, StepsModule, TableModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
