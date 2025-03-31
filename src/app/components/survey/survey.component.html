@@ -1,1 +1,28 @@
-<p>survey works!</p>
+<div class="card">
+
+<p-steps [model]="steps" [(activeIndex)]="activeStep" styleClass="mb-5"></p-steps>
+
+<div *ngIf="activeStep === 0">
+    <h3>Étape 1 : Informations générales</h3>
+    <form [formGroup]="surveyForm">
+        <label>Nom du Survey :</label>
+        <input pInputText formControlName="surveyName">
+    </form>
+</div>
+
+<div *ngIf="activeStep === 1">
+    <h3>Étape 2 : Ajouter des questions</h3>
+    <app-question></app-question>    
+</div>
+
+<div *ngIf="activeStep === 2">
+    <h3>Étape 3 : Aperçu & Validation</h3>
+    <p>{{ surveyForm.value | json }}</p>
+</div>
+
+<div class="flex justify-between mt-4">
+    <p-button label="Précédent" icon="pi pi-chevron-left" (click)="prevStep()" [disabled]="activeStep === 0"></p-button>
+    <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" [disabled]="activeStep === steps.length - 1"></p-button>
+</div>
+
+</div>
