@@ -1,0 +1,41 @@
+
+  
+  .stats-cards {
+    display: flex;
+    gap: 10px;
+  }
+
+  .p-card-body {
+    height: 1400px;
+  }
+  
+  .stat-card {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    height: 140px;
+  }
+  
+  .text-primary {
+    color: #3f51b5;
+  }
+  
+  .text-success {
+    color: #43a047;
+  }
+  
+  .text-warning {
+    color: #e5951e;
+  }
+  
+  .recent-surveys {
+    margin-top: 20px;
+  }
+
+  
+  .charts-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  

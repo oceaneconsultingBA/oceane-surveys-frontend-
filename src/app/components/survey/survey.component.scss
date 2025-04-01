@@ -1,0 +1,22 @@
+.status {
+    padding: 4px 6px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    display: inline-block;
+    font-weight: bold;
+  }
+  
+  .status-completed {
+    color: #666;
+    background-color: #8f8e8e1f;
+  }
+  
+  .status-draft {
+    color: #e5951e;
+    background-color: #f9e6c6;
+  }
+  
+  .status-active {
+    color: #43a047;
+    background-color: #bff6c3;
+  }

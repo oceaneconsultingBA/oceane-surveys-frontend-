@@ -21,12 +21,18 @@ html, body {
   height: 80vh;
 }
 
+mat-sidenav {
+  width: 170px;
+  position: absolute;
+}
+
+
 mat-sidenav-content {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 100%;
-  padding: 20px;
+  width: 100%; /* Le reste de l’espace */
+  padding: 10px;
   height: 80vh;
 }
 

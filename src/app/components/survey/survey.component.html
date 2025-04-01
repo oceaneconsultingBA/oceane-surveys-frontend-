@@ -1,1 +1,55 @@
-<p>survey works!</p>
+<div class="card">
+    <p-toast></p-toast>
+    <p-toolbar styleClass="mb-6">
+        <ng-template #start>
+            <p-button label="Nouveau" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+        </ng-template>
+    </p-toolbar>
+    <p-table 
+    #dt
+    [value]="enquetes" 
+    [tableStyle]="{ 'min-width': '50rem' }" 
+    tableStyleClass="p-datatable-striped" 
+    [rows]="20"  
+    [paginator]="true"
+    [globalFilterFields]="['title', 'creationDate', 'lastModifiedDate', 'status']"
+    [rowHover]="true"
+    dataKey="id">
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="globalSearch($event)" placeholder="Recherche..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="title">Nom de l'enquete <p-sortIcon field="title" /></th>
+                <th pSortableColumn="creationDate">Date de la creation <p-sortIcon field="creationDate" /></th>
+                <th pSortableColumn="lastModifiedDate">Dernière modification <p-sortIcon field="lastModifiedDate" /></th>
+                <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+                <th pSortableColumn="questions">Nombre de question <p-sortIcon field="questions" /></th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rc>
+            <tr>
+                <td>{{ rc.title }}</td>
+                <td>{{ rc.creationDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ rc.lastModifiedDate | date:'dd/MM/yyyy' }}</td>
+                <td [ngSwitch]="rc.status">
+                    <span *ngSwitchCase="0" class="status status-draft" >En pause</span>
+                    <span *ngSwitchCase="1" class="status status-active">Active</span>
+                    <span *ngSwitchCase="2" class="status status-completed">Complétée</span>
+                    <span *ngSwitchDefault>unknown</span>
+                  </td>
+                  <td>{{ rc.questions?.length ?? 0 }}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editeEnquete(rc)" />
+                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteEnquete(rc)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
