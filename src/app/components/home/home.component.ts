@@ -35,13 +35,7 @@ export class HomeComponent implements OnInit {
     };
 
     this.surveyService.getSurveys().subscribe(
-      (data: Survey[]) => {
-        this.surveys = data.values;
-      },
-      (error: any) => {
-        console.error('Erreur lors de la récupération des enquetes :', error);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de la récupération des enquetes' });
-      }
+      //cc
     );
 
   }

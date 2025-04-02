@@ -57,7 +57,10 @@ export class RecipientComponent implements OnInit {
   exportColumns!: ExportColumn[];
 
   recipientForm: FormGroup;
-  recipientTypes = Object.values(RecipientType); // Liste des types de recipients
+  recipientTypes = Object.keys(RecipientType).map(key => ({
+    label: RecipientType[key as keyof typeof RecipientType], // Valeur affichée
+    value: key // Clé de l'énum (ce qui sera sauvegardé)
+  }));
 
   @ViewChild('dt') dt!: Table;
 
@@ -67,6 +70,7 @@ export class RecipientComponent implements OnInit {
     private recipientService: RecipientService
   ) {
     this.recipientForm = this.fb.group({
+      id: [null],
       email: ['', [Validators.required, Validators.email]],
       firstName: [''],
       lastName: [''],
@@ -76,14 +80,7 @@ export class RecipientComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.recepients = [
-      { id: 1, firstName: "aze", lastName: "sss", email: "a@live.fr", company: "AXA", type: RecipientType.CLIENT },
-      { id: 2, firstName: "aze1", lastName: "sss1", email: "a1@live.fr", company: "OCEANE", type: RecipientType.CLIENT },
-      { id: 3, firstName: "aze2", lastName: "sss2", email: "a2@live.fr", company: "AUTRE", type: RecipientType.CLIENT },
-      { id: 4, firstName: "aze3", lastName: "sss3", email: "a3@live.fr", company: "AQSD", type: RecipientType.AUTRE },
-      { id: 5, firstName: "aze4", lastName: "sss4", email: "a4@live.fr", company: "AQSS", type: RecipientType.FREELANCE },
-      { id: 6, firstName: "aze6", lastName: "sss5", email: "a5@live.fr", company: "OCEANE", type: RecipientType.CONSULTANT },
-    ];
+    this.getRecepients();
 
     this.cols = [
       { field: 'firstName', header: 'Nom', customExportHeader: 'Product Code' },
@@ -93,6 +90,19 @@ export class RecipientComponent implements OnInit {
     ];
 
     this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+  }
+
+  private getRecepients() {
+    this.recipientService.getRecipients().subscribe({
+      next: (data: any) => {
+        console.log('Destinataires récupérées avec succès :', data);
+        this.recepients = data; // Met à jour la liste des destinataire
+      },
+      error: (err: any) => {
+        console.error('Erreur lors du chargement des destinataires :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des destinataires' });
+      }
+    });
   }
 
   // Pour la soumission du formulaire
@@ -115,7 +125,9 @@ export class RecipientComponent implements OnInit {
       next: (newRecipient: any) => {
         console.log('Recipient créé avec succès :', newRecipient);
         this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Recipient créé avec succès' });
+        this.recepients.push(newRecipient);
         this.recipientForm.reset(); // Réinitialiser le formulaire après la création
+        this.recepientDialog = false;
       },
       error: (err: any) => {
         console.error('Erreur lors de la création du recipient :', err);
@@ -130,6 +142,16 @@ export class RecipientComponent implements OnInit {
       next: (newRecipient: any) => {
         console.log('Recipient mis à jour avec succès :', newRecipient);
         this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Recipient mis à jour avec succès' });
+        const index = this.recepients.findIndex(recipient => recipient.id === newRecipient.id);
+  
+        if (index !== -1) {
+          // Si l'élément est trouvé, on le met à jour
+          this.recepients[index] = { ...this.recepients[index], ...newRecipient };
+        } else {
+          // Sinon, on ajoute le nouvel élément
+          this.recepients.push(newRecipient);
+        }
+        this.recepientDialog = false;
         this.recipientForm.reset(); // Réinitialiser le formulaire après la mise à jour
       },
       error: (err: any) => {
@@ -151,6 +173,7 @@ export class RecipientComponent implements OnInit {
   editRecepient(recipient: Recipient) {
     this.modalMode = "EDIT";
     this.recipientForm.patchValue({
+      id: recipient.id,
       email: recipient.email,
       firstName: recipient.firstName || '',
       lastName: recipient.lastName || '',

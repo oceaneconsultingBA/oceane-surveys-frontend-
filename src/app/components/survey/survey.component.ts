@@ -55,15 +55,22 @@ export class SurveyComponent implements OnInit {
 
   ngOnInit(): void {
     const questions: Question[] = []; 
-    this.enquetes = [
-      { id: 1, title: "aze", description: "sss", creationDate: new Date(), lastModifiedDate: new Date(), status: SurveyStatus.ACTIVE, questions: questions },
-      { id: 2, title: "aze 2", description: "sss", creationDate: new Date(), lastModifiedDate: new Date(), status: SurveyStatus.COMPLETED, questions: questions },
-      { id: 3, title: "aze 3", description: "sss", creationDate: new Date(), lastModifiedDate: new Date(), status: SurveyStatus.DRAFT, questions: questions },
-      
-    ];
+    this.getSurveys();
   }
 
-
+  private getSurveys() {
+    this.surveyService.getSurveys().subscribe({
+      next: (data: any) => {
+        console.log('Enquêtes récupérées avec succès :', data);
+        this.enquetes = data; // Met à jour la liste des enquêtes
+      },
+      error: (err: any) => {
+        console.error('Erreur lors du chargement des enquêtes :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des enquêtes' });
+      }
+    });
+  }
+  
 
 
   // Modifier un recipient existant
