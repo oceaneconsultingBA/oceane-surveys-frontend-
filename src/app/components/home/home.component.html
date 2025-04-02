@@ -1,1 +1,63 @@
-<p>home works!</p>
+<div class="dashboard-container">
+    <h2>Tableau de bord</h2>
+  
+    <!-- Cartes de statistiques -->
+    <div class="stats-cards">
+      <p-card class="stat-card">
+        <span>Enquêtes actives</span>
+        <h2 class="stat-value text-primary">8</h2>
+      </p-card>
+  
+      <p-card class="stat-card">
+        <span>Réponses ce mois</span>
+        <h2 class="stat-value text-success">124</h2>
+      </p-card>
+  
+      <p-card class="stat-card">
+        <span>Taux de réponse</span>
+        <h2 class="stat-value text-warning">68%</h2>
+      </p-card>
+    </div>
+  
+    <!-- Table des enquêtes récentes -->
+    <p-card class="recent-surveys">
+      <h3>Enquêtes récentes</h3>
+      <p-table [value]="surveys" class="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nom</th>
+            <th>Date</th>
+            <th>Statut</th>
+            <th>Réponses</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template let-survey pTemplate="body">
+          <tr>
+            <td>{{ survey.name }}</td>
+            <td>cc</td>
+            <td>
+             cc
+            </td>
+            <td>{{ survey.responses }}</td>
+            <td><p-button icon="pi pi-ellipsis-h"></p-button></td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  
+    <!-- Graphiques -->
+    <div class="charts-container">
+      <p-card>
+        <h4>Taux de participation</h4>
+        <p-chart type="bar" [data]="chartData"></p-chart>
+      </p-card>
+  
+      <p-card>
+        <h4>Temps de réponse moyen</h4>
+        <h2 class="text-primary">1.8</h2>
+        <span>jours</span>
+      </p-card>
+    </div>
+  </div>
+  

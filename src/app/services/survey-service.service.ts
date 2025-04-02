@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Survey } from '../survey';
+import { Survey } from '../models/survey';
+import { environment } from '../../environnements/environnement';
 
 
 @Injectable({ providedIn: 'root' })
 export class SurveyService {
-  private apiUrl = '/api/surveys';
-
+  private apiUrl: string = `${environment.apiBaseUrl}/surveys`;
   constructor(private http: HttpClient) {}
 
   getSurveys(): Observable<Survey[]> {
