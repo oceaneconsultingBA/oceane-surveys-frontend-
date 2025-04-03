@@ -24,30 +24,68 @@
     
           <!-- Fréquence -->
           <div class="form-group">
-            <label for="frequence">Fréquence</label>
-            <p-dropdown id="frequence" formControlName="frequence" [options]="frequencies" placeholder="Sélectionner une fréquence"></p-dropdown>
-          </div>        
+            <label for="frequencies">Fréquence</label>
+            <p-dropdown id="frequencies" formControlName="frequencies" [options]="frequencies" placeholder="Sélectionner une fréquence"></p-dropdown>
+          </div>
     </form>
 </div>
 
-<div *ngIf="activeStep === 1">
+<div [style.display]="activeStep === 1 ? 'block' : 'none'">
     <h3>Étape 2 : Ajouter des questions</h3>
-    <app-question></app-question>    
+    <app-questions #questions [editable]="true"></app-questions>
 </div>
 
-<div *ngIf="activeStep === 2">
-    <h3>Étape 2 : Ajouter des destinataires</h3>
-    <app-recipient></app-recipient>    
+<div [style.display]="activeStep === 2 ? 'block' : 'none'">
+    <h3>Étape 3 : Ajouter des destinataires</h3>
+    <app-recipient #recipients></app-recipient>    
 </div>
 
-<div *ngIf="activeStep === 3">
-    <h3>Étape 3 : Aperçu & Validation</h3>
-    <p>{{ surveyForm.value | json }}</p>
+<div [style.display]="activeStep === 3 ? 'block' : 'none'">
+  <h3>Étape 4 : Aperçu & Validation</h3>
+  <h4>Informations générales</h4>
+    <div class="form-group">
+        <label for="surveyName">Nom du Survey</label>
+        <span>{{surveyForm.controls['surveyName'].value}}</span>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <span>{{surveyForm.controls['description'].value}}</span>
+      </div>
+
+      <!-- Type d'enquête -->
+      <div class="form-group">
+        <label for="enqueteType">Type d'enquête</label>
+        <span>{{getEnqueteTypesLabel()}}</span>
+      </div>
+
+      <!-- Fréquence -->
+      <div class="form-group">
+        <label for="frequencies">Fréquence</label>
+        <span>{{getFrequenciesLabel()}}</span>
+      </div>
+
+      <h4>Questions</h4>
+    <!-- <p>{{questionSummary.getQuestionDTOs() | json}}</p> -->
+    <app-questions #questionSummary [editable]="false"></app-questions>
+
+    <h4>Destinataires</h4>
+    <ul *ngIf="recipientsComponent?.getSelectedRecipients()">
+        <li *ngFor="let selectedRecipient of recipientsComponent.getSelectedRecipients()">
+            <span>{{ selectedRecipient.firstName }} {{ selectedRecipient.lastName }}</span>
+        </li>
+    </ul>
 </div>
 
 <div class="flex justify-between mt-4">
     <p-button label="Précédent" icon="pi pi-chevron-left" (click)="prevStep()" [disabled]="activeStep === 0"></p-button>
+    &nbsp;
     <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" [disabled]="activeStep === steps.length - 1"></p-button>
+</div>
+<br/>
+<div class="flex justify-between mt-4">
+    <p-button label="Sauvegarder" icon="pi" (click)="save()" *ngIf="activeStep === 3"></p-button>
 </div>
 
 </div>

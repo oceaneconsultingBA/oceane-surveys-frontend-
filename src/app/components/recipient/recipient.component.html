@@ -20,7 +20,9 @@
     [paginator]="true"
     [globalFilterFields]="['firstName', 'lastName', 'company', 'type']"
     [rowHover]="true"
-    dataKey="id">
+    dataKey="id"
+    selectionMode="multiple"
+    [(selection)]="selectedRecipients">
     <ng-template #caption>
         <div class="flex items-center justify-between">
             <p-iconfield>
@@ -31,6 +33,7 @@
     </ng-template>
         <ng-template #header>
             <tr>
+                <th></th>
                 <th pSortableColumn="firstName">Nom <p-sortIcon field="firstName" /></th>
                 <th pSortableColumn="lastName">Prénom <p-sortIcon field="lastName" /></th>
                 <th>Email</th>
@@ -40,7 +43,11 @@
             </tr>
         </ng-template>
         <ng-template #body let-rc>
-            <tr>
+            <tr [pSelectableRow]="rowData">
+                <td>
+                      <p-tableCheckbox [value]="rc">
+                  </p-tableCheckbox>
+                </td>
                 <td>{{ rc.firstName }}</td>
                 <td>{{ rc.lastName }}</td>
                 <td>{{ rc.email }}</td>
@@ -53,6 +60,7 @@
             </tr>
         </ng-template>
     </p-table>
+    <!-- <p>{{selectedRecipients | json}}</p> -->
 </div>
 
 <p-dialog [(visible)]="recepientDialog" [style]="{ width: '450px' }"  [appendTo]="'body'" [header]="modalMode === 'CREATE' ? 'Création'+ ' d\'un destinataire' : 'Modification' + ' d\'un destinataire'" [modal]="true">

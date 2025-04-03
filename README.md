@@ -2,6 +2,15 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.3.
 
+## Installation
+
+To install the project:
+1. Install Node.js from [here](https://nodejs.org/en/download)
+1. Add Node.js folder to the Operating System path
+1. Install VSCode from [here](https://code.visualstudio.com/download)
+1. Clone the project
+1. In the folder of the project, run `npm i`
+
 ## Development server
 
 To start a local development server, run:
@@ -9,6 +18,14 @@ To start a local development server, run:
 ```bash
 ng serve
 ```
+
+If it fails, run:
+
+```bash
+npm start
+```
+
+If it fails again, run in console or in VSCode terminal.
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 

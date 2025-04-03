@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { SurveyComponent } from './components/survey/survey.component';
-import { QuestionComponent } from './components/question/question.component';
 import { RecipientComponent } from './components/recipient/recipient.component';
 
 

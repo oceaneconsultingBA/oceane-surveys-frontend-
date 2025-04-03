@@ -29,4 +29,8 @@ export class RecipientService {
   deleteRecipient(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  addRecipientToSurvey(recipientId: number, surveyId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${recipientId}/surveys/${surveyId}`);
+  }
 }
