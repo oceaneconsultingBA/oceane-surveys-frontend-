@@ -1,0 +1,91 @@
+<div class="card">
+
+<p-steps [model]="steps" [(activeIndex)]="activeStep" styleClass="mb-5"></p-steps>
+
+<div *ngIf="activeStep === 0">
+    <h3>Étape 1 : Informations générales</h3>
+    <form [formGroup]="surveyForm">
+        <div class="form-group">
+            <label for="surveyName">Nom du Survey</label>
+            <input pInputText id="surveyName" formControlName="surveyName" placeholder="Entrez le titre de l'enquête" />
+          </div>
+    
+          <!-- Description -->
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" pInputTextarea formControlName="description" placeholder="Entrez une description ici..." rows="4"></textarea>
+          </div>
+    
+          <!-- Type d'enquête -->
+          <div class="form-group">
+            <label for="enqueteType">Type d'enquête</label>
+            <p-dropdown id="enqueteType" formControlName="enqueteType" [options]="enqueteTypes" placeholder="Sélectionner un type"></p-dropdown>
+          </div>
+    
+          <!-- Fréquence -->
+          <div class="form-group">
+            <label for="frequencies">Fréquence</label>
+            <p-dropdown id="frequencies" formControlName="frequencies" [options]="frequencies" placeholder="Sélectionner une fréquence"></p-dropdown>
+          </div>
+    </form>
+</div>
+
+<div [style.display]="activeStep === 1 ? 'block' : 'none'">
+    <h3>Étape 2 : Ajouter des questions</h3>
+    <app-questions #questions [editable]="true"></app-questions>
+</div>
+
+<div [style.display]="activeStep === 2 ? 'block' : 'none'">
+    <h3>Étape 3 : Ajouter des destinataires</h3>
+    <app-recipient #recipients></app-recipient>    
+</div>
+
+<div [style.display]="activeStep === 3 ? 'block' : 'none'">
+  <h3>Étape 4 : Aperçu & Validation</h3>
+  <h4>Informations générales</h4>
+    <div class="form-group">
+        <label for="surveyName">Nom du Survey</label>
+        <span>{{surveyForm.controls['surveyName'].value}}</span>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <span>{{surveyForm.controls['description'].value}}</span>
+      </div>
+
+      <!-- Type d'enquête -->
+      <div class="form-group">
+        <label for="enqueteType">Type d'enquête</label>
+        <span>{{getEnqueteTypesLabel()}}</span>
+      </div>
+
+      <!-- Fréquence -->
+      <div class="form-group">
+        <label for="frequencies">Fréquence</label>
+        <span>{{getFrequenciesLabel()}}</span>
+      </div>
+
+      <h4>Questions</h4>
+    <!-- <p>{{questionSummary.getQuestionDTOs() | json}}</p> -->
+    <app-questions #questionSummary [editable]="false"></app-questions>
+
+    <h4>Destinataires</h4>
+    <ul *ngIf="recipientsComponent?.getSelectedRecipients()">
+        <li *ngFor="let selectedRecipient of recipientsComponent.getSelectedRecipients()">
+            <span>{{ selectedRecipient.firstName }} {{ selectedRecipient.lastName }}</span>
+        </li>
+    </ul>
+</div>
+
+<div class="flex justify-between mt-4">
+    <p-button label="Précédent" icon="pi pi-chevron-left" (click)="prevStep()" [disabled]="activeStep === 0"></p-button>
+    &nbsp;
+    <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" [disabled]="activeStep === steps.length - 1"></p-button>
+</div>
+<br/>
+<div class="flex justify-between mt-4">
+    <p-button label="Sauvegarder" icon="pi" (click)="save()" *ngIf="activeStep === 3"></p-button>
+</div>
+
+</div>

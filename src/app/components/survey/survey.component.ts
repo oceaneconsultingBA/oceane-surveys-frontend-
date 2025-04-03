@@ -1,63 +1,111 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { StepsModule } from 'primeng/steps';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Survey } from '../../models/survey';
+import { MessageService } from 'primeng/api';
+import { SurveyStatus } from '../../models/survey-status';
+import { Question } from '../../models/question';
+import { SurveyService } from '../../services/survey-service.service';
+import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { DropdownModule } from 'primeng/dropdown';
-import { QuestionComponent } from '../question/question.component';
-import { RecipientComponent } from "../recipient/recipient.component"; 
+import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
+import { CommonModule } from '@angular/common';
+import { SelectModule } from 'primeng/select';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-survey',
-  imports: [StepsModule, ButtonModule, ReactiveFormsModule, TableModule, CommonModule,
-     QuestionComponent, RecipientComponent, DropdownModule],
+  imports: [
+    TableModule,
+    ButtonModule,
+    SelectModule,
+    ToastModule,
+    ToolbarModule,
+    InputTextModule,
+    TextareaModule,
+    CommonModule,
+        IconFieldModule,
+        InputIconModule
+  ],
   templateUrl: './survey.component.html',
   styleUrl: './survey.component.scss'
 })
-export class SurveyComponent {
-  activeStep = 0;
-  surveyForm: FormGroup;
-  questions: any[] = [];
+export class SurveyComponent implements OnInit {
+  enquetes!: Survey[];
+  enquete!: Survey;
+  submitted: boolean = false;
+  statuses!: any[];
+  modalMode!: String;
+  SurveyStatus = SurveyStatus;
+  
+  @ViewChild('dt') dt!: Table;
 
-  description: string = '';
-  enqueteTypes = [
-    { label: 'Satisfaction Consultant', value: 'satisfaction_consultant' },
-    { label: 'Satisfaction Client', value: 'satisfaction_client' },
-    { label: 'Autre', value: 'autre' }
-  ];
-  frequencies = [
-    { label: 'Mensuelle', value: 'mensuelle' },
-    { label: 'Trimestrielle', value: 'trimestrielle' },
-    { label: 'Annuelle', value: 'annuelle' }
-  ];
+  constructor(
+    private messageService: MessageService,
+    private surveyService: SurveyService,
+    private router: Router
+  ) {
 
-  steps = [
-    { label: 'Informations' },
-    { label: 'Questions' },
-    { label: 'Destinataires' },
-    { label: 'Validation' }
-  ];
+  }
 
-  constructor(private fb: FormBuilder) {
-    this.surveyForm = this.fb.group({
-      surveyName: ['', Validators.required]
+  ngOnInit(): void {
+    const questions: Question[] = []; 
+    this.getSurveys();
+  }
+
+  private getSurveys() {
+    this.surveyService.getSurveys().subscribe({
+      next: (data: any) => {
+        console.log('Enquêtes récupérées avec succès :', data);
+        this.enquetes = data; // Met à jour la liste des enquêtes
+      },
+      error: (err: any) => {
+        console.error('Erreur lors du chargement des enquêtes :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des enquêtes' });
+      }
+    });
+  }
+  
+
+
+  // Modifier un recipient existant
+  editeEnquete(enquete: Survey) {
+
+  }
+
+  // Ouvrir la fenêtre de création
+  openNew() {
+    //this.recepientDialog = true;
+    this.submitted = false;
+    this.modalMode = "CREATE";
+    //this.recipientForm.reset();
+    this.router.navigate(['/surveys/creation']);
+  }
+
+
+
+  // Supprimer un recipient
+  deleteEnquete(enquete: Survey) {
+    this.surveyService.deleteSurvey(enquete.id).subscribe({
+      next: (data: any) => {
+        console.log('Enquete supprimé avec succès :', data);
+        this.enquetes = this.enquetes.filter(r => r.id !== enquete.id);
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquete supprimé avec succès' });
+      },
+      error: (err: any) => {
+        console.error('Erreur lors de la suppression  :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression' });
+      }
     });
   }
 
-  nextStep() {
-    if (this.activeStep < this.steps.length - 1) {
-      this.activeStep++;
-    }
+
+  globalSearch(event: Event):void{
+    const target = (event.target as HTMLInputElement);
+    this.dt.filterGlobal(target.value, 'contains');
   }
 
-  prevStep() {
-    if (this.activeStep > 0) {
-      this.activeStep--;
-    }
-  }
-
-  removeQuestion(question: any) {
-    this.questions = this.questions.filter(q => q !== question);
-  }
 }

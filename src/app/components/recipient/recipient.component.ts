@@ -63,6 +63,8 @@ export class RecipientComponent implements OnInit {
   }));
 
   @ViewChild('dt') dt!: Table;
+  rowData: any;
+  selectedRecipients: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -103,6 +105,10 @@ export class RecipientComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des destinataires' });
       }
     });
+  }
+
+  getSelectedRecipients(): any[] {
+    return this.selectedRecipients;
   }
 
   // Pour la soumission du formulaire

@@ -1,53 +1,55 @@
 <div class="card">
-
-<p-steps [model]="steps" [(activeIndex)]="activeStep" styleClass="mb-5"></p-steps>
-
-<div *ngIf="activeStep === 0">
-    <h3>Étape 1 : Informations générales</h3>
-    <form [formGroup]="surveyForm">
-        <div class="form-group">
-            <label for="surveyName">Nom du Survey</label>
-            <input pInputText id="surveyName" formControlName="surveyName" placeholder="Entrez le titre de l'enquête" />
-          </div>
-    
-          <!-- Description -->
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" pInputTextarea formControlName="description" placeholder="Entrez une description ici..." rows="4"></textarea>
-          </div>
-    
-          <!-- Type d'enquête -->
-          <div class="form-group">
-            <label for="enqueteType">Type d'enquête</label>
-            <p-dropdown id="enqueteType" formControlName="enqueteType" [options]="enqueteTypes" placeholder="Sélectionner un type"></p-dropdown>
-          </div>
-    
-          <!-- Fréquence -->
-          <div class="form-group">
-            <label for="frequence">Fréquence</label>
-            <p-dropdown id="frequence" formControlName="frequence" [options]="frequencies" placeholder="Sélectionner une fréquence"></p-dropdown>
-          </div>        
-    </form>
-</div>
-
-<div *ngIf="activeStep === 1">
-    <h3>Étape 2 : Ajouter des questions</h3>
-    <app-question></app-question>    
-</div>
-
-<div *ngIf="activeStep === 2">
-    <h3>Étape 2 : Ajouter des destinataires</h3>
-    <app-recipient></app-recipient>    
-</div>
-
-<div *ngIf="activeStep === 3">
-    <h3>Étape 3 : Aperçu & Validation</h3>
-    <p>{{ surveyForm.value | json }}</p>
-</div>
-
-<div class="flex justify-between mt-4">
-    <p-button label="Précédent" icon="pi pi-chevron-left" (click)="prevStep()" [disabled]="activeStep === 0"></p-button>
-    <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" [disabled]="activeStep === steps.length - 1"></p-button>
-</div>
-
+    <p-toast></p-toast>
+    <p-toolbar styleClass="mb-6">
+        <ng-template #start>
+            <p-button label="Nouveau" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+        </ng-template>
+    </p-toolbar>
+    <p-table 
+    #dt
+    [value]="enquetes" 
+    [tableStyle]="{ 'min-width': '50rem' }" 
+    tableStyleClass="p-datatable-striped" 
+    [rows]="20"  
+    [paginator]="true"
+    [globalFilterFields]="['title', 'creationDate', 'lastModifiedDate', 'status']"
+    [rowHover]="true"
+    dataKey="id">
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="globalSearch($event)" placeholder="Recherche..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="title">Nom de l'enquete <p-sortIcon field="title" /></th>
+                <th pSortableColumn="creationDate">Date de la creation <p-sortIcon field="creationDate" /></th>
+                <th pSortableColumn="lastModifiedDate">Dernière modification <p-sortIcon field="lastModifiedDate" /></th>
+                <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+                <th pSortableColumn="questions">Nombre de question <p-sortIcon field="questions" /></th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rc>
+            <tr>
+                <td>{{ rc.title }}</td>
+                <td>{{ rc.creationDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ rc.lastModifiedDate | date:'dd/MM/yyyy' }}</td>
+                <td [ngSwitch]="rc.status">
+                    <span *ngSwitchCase="0" class="status status-draft" >En pause</span>
+                    <span *ngSwitchCase="1" class="status status-active">Active</span>
+                    <span *ngSwitchCase="2" class="status status-completed">Complétée</span>
+                    <span *ngSwitchDefault>unknown</span>
+                  </td>
+                  <td>{{ rc.questions?.length ?? 0 }}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editeEnquete(rc)" />
+                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteEnquete(rc)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

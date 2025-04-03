@@ -1,0 +1,112 @@
+// Variables globales
+$primary-color: #007ad9;
+$secondary-color: #f4f4f4;
+$border-radius: 8px;
+
+:host {
+  display: block;
+  padding: 20px;
+
+  .card{
+    width: 100vh;
+  }
+  
+  // Style du stepper
+  .p-steps {
+    background: $secondary-color;
+    border-radius: $border-radius;
+    padding: 15px;
+  }
+
+  .p-steps-item {
+    &.p-highlight {
+      .p-steps-title {
+        font-weight: bold;
+        color: $primary-color;
+      }
+    }
+  }
+
+  // Conteneur des étapes
+  .step-content {
+    background: white;
+    padding: 20px;
+    border-radius: $border-radius;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  // Boutons de navigation
+  .navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    p-button {
+      min-width: 120px;
+    }
+  }
+
+  // Style des formulaires
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, p-dropdown {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: $border-radius;
+      transition: border-color 0.2s;
+
+      &:focus {
+        border-color: $primary-color;
+      }
+    }
+  }
+
+  // Table des questions
+  .question-table {
+    margin-top: 15px;
+    .p-table {
+      border-radius: $border-radius;
+      overflow: hidden;
+    }
+
+    th {
+      background: $primary-color;
+      color: white;
+      text-align: left;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+}

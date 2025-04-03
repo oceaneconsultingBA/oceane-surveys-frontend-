@@ -1,50 +1,45 @@
 <div class="question-container">
-  <h3>Ajouter une question</h3>
+    <form [formGroup]="questionForm">
+    <h3>Question</h3>
 
-  <label for="questionType">Type de question*</label>
-  <p-dropdown 
-      id="questionType" 
-      [options]="questionTypes" 
-      [(ngModel)]="questionType" 
-      placeholder="Sélectionner un type">
-  </p-dropdown>
+    <label *ngIf="editable" for="questionType">Type de question*</label>
+    <p-dropdown *ngIf="editable" id="questionType" formControlName="questionType" [options]="questionTypes" placeholder="Sélectionner un type"></p-dropdown>
 
-  <label for="questionText">Texte de la question*</label>
-  <p-inputTextarea id="questionText" [(ngModel)]="questionText" rows="2"></p-inputTextarea>
+    <label for="questionText">Texte de la question*</label>
+    <textarea *ngIf="editable" id="questionText" pInputTextarea formControlName="questionText" placeholder="Entrez une question ici..." rows="2"></textarea>
+    <span *ngIf="!editable">{{questionForm.controls['questionText'].value}}</span>
 
-  <div *ngIf="questionType === 'choix-unique' || questionType === 'choix-multiple'">
-      <label>Options de réponse*</label>
-      <p-listbox 
-          [options]="responseOptions" 
-          [(ngModel)]="selectedResponses" 
-          [multiple]="questionType === 'choix-multiple'">
-      </p-listbox>
+    <div *ngIf="['choix-unique', 'choix-multiple'].includes(questionForm.controls['questionType'].value)">
+        <label>Options de réponse*</label>
+        <p-listbox
+            *ngIf="editable"
+            [options]="responseOptions" 
+            formControlName="selectedResponses" 
+            [multiple]="questionType === 'choix-multiple'">
+        </p-listbox>
+        <span *ngIf="!editable">{{questionForm.controls['selectedResponses'].value}}</span>
 
-      <div class="add-option">
-          <p-inputText [(ngModel)]="newOption" placeholder="Ajouter une option..." />
-          <p-button label="Ajouter" icon="pi pi-plus" (click)="addOption()"></p-button>
-      </div>
+        <div *ngIf="editable" class="add-option">
+            <textarea id="newOption" pInputTextarea formControlName="newOption" placeholder="Ajouter une option..." rows="2"></textarea>
+            <p-button label="Ajouter" icon="pi pi-plus" (click)="addOption()"></p-button>
+        </div>
 
-      <ul>
-          <li *ngFor="let option of responseOptions; let i = index">
-              <span>{{ option }}</span>
-              <p-button icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeOption(i)"></p-button>
-          </li>
-      </ul>
-  </div>
+        <ul>
+            <li *ngFor="let option of responseOptions; let i = index">
+                <span>{{ option }}</span>
+                <p-button *ngIf="editable" icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeOption(i)"></p-button>
+            </li>
+        </ul>
+    </div>
 
-  <div *ngIf="questionType === 'texte'">
-      <label>Réponse :</label>
-      <p-inputTextarea [(ngModel)]="textResponse" rows="2" placeholder="Écrivez votre réponse ici..."></p-inputTextarea>
-  </div>
+    <div *ngIf="!editable && questionType === 'texte'">
+        <label>Réponse :</label>
+        <textarea id="textResponse" pInputTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
+    </div>
 
-  <div *ngIf="questionType === 'rating'" class="rating">
-      <label>Note :</label>
-      <p-rating [(ngModel)]="rating"></p-rating>
-  </div>
-
-  <div class="actions">
-      <p-button label="Annuler" class="p-button-secondary"></p-button>
-      <p-button label="Ajouter" class="p-button-primary"></p-button>
-  </div>
+    <div *ngIf="questionType === 'rating'" class="rating">
+        <label>Note :</label>
+        <p-rating formControlName="rating"></p-rating>
+    </div>
+    </form>
 </div>
