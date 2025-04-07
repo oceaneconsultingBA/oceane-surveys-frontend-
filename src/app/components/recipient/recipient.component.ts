@@ -207,45 +207,78 @@ export class RecipientComponent implements OnInit {
   nextId = 1;
   expectedColumns = ["firstName", "lastName", "email", "company", "type"];
 
-  // Traitement du fichier Excel
   onFileSelect(event: any) {
     const file = event.files[0]; // Récupérer le fichier sélectionné
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
+    reader.onload = async (e: any) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
 
-      const sheetName = workbook.SheetNames[0]; // Première feuille du fichier
-      const worksheet = workbook.Sheets[sheetName];
+        const sheetName = workbook.SheetNames[0]; // Première feuille du fichier
+        const worksheet = workbook.Sheets[sheetName];
 
-      // Convertir en JSON brut
-      const rawData: any[] = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+        // Convertir en JSON brut
+        const rawData: any[] = XLSX.utils.sheet_to_json(worksheet, { raw: true });
 
-      // Vérification des colonnes
-      const fileColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
-      if (!this.validateColumns(fileColumns)) {
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Les colonnes du fichier ne correspondent pas à l'ordre attendu : " + this.expectedColumns.join(", ") });
-        return;
-      }
+        // Vérification des colonnes
+        const fileColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
+        if (!this.validateColumns(fileColumns)) {
+            this.messageService.add({ 
+                severity: 'error', 
+                summary: 'Erreur', 
+                detail: "Les colonnes du fichier ne correspondent pas à l'ordre attendu : " + this.expectedColumns.join(", ") 
+            });
+            return;
+        }
 
-      // Mapper les données pour correspondre au modèle `Recipient`
-      this.recepients = [
-        ...this.recepients, // Conserver les destinataires existants
-        ...rawData.map(row => ({
-          id: this.nextId++, // Générer un ID unique
-          email: row["email"] || "", 
-          firstName: row["firstName"] || undefined, 
-          lastName: row["lastName"] || undefined, 
-          company: row["company"] || undefined,
-          type: this.mapRecipientType(row["type"])
-        }))
-      ];
+        // Initialisation de la liste des destinataires à sauvegarder
+        const newRecipients = rawData.map(row => ({
+            id:row["id"] || undefined,
+            email: row["email"] || "", 
+            firstName: row["firstName"] || undefined, 
+            lastName: row["lastName"] || undefined, 
+            company: row["company"] || undefined,
+            type: row["type"]||undefined
+        }));
+
+        let savedRecipients: Recipient[] = [];
+
+        // Sauvegarde des destinataires en base et mise à jour de la liste locale
+        for (const recipient of newRecipients) {
+            try {
+                const savedRecipient = await this.recipientService.createRecipient(recipient).toPromise();
+                
+                // Vérifier que l'élément a bien été sauvegardé
+                if (savedRecipient) {
+                    savedRecipients.push(savedRecipient);
+                }
+            } catch (error) {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: `Échec de l'ajout du destinataire : ${recipient.email}`
+                });
+                console.error(`Erreur lors de l'ajout de ${recipient.email} :`, error);
+            }
+        }
+
+        // Mettre à jour la liste locale avec uniquement les éléments bien enregistrés
+        if (savedRecipients.length > 0) {
+            this.recepients = [...this.recepients, ...savedRecipients];
+
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Succès',
+                detail: `${savedRecipients.length} destinataire(s) ajouté(s) avec succès.`
+            });
+        }
     };
 
     reader.readAsArrayBuffer(file);
-  }
+}
+
 
   // Vérification des colonnes du fichier
   private validateColumns(fileColumns: string[]): boolean {
