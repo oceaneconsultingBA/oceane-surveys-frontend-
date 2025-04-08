@@ -8,7 +8,7 @@ import { SurveyComponent } from './components/survey/survey.component';
 
 export const routes: Routes = [
   { path: 'dashboard', component: HomeComponent },
-  { path: 'surveys/creation', component: SurveyCreationComponent },
+  { path: 'surveys/edit', component: SurveyCreationComponent },
   { path: 'surveys', component: SurveyComponent },
   { path: 'recipients', component: RecipientComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

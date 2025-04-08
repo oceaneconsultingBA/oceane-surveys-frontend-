@@ -52,7 +52,6 @@ export class SurveyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const questions: Question[] = []; 
     this.getSurveys();
   }
 
@@ -68,12 +67,10 @@ export class SurveyComponent implements OnInit {
       }
     });
   }
-  
-
 
   // Modifier un recipient existant
   editeEnquete(enquete: Survey) {
-
+    this.router.navigate(['/surveys/edit'], {queryParams: {'survey-id': enquete.id}});
   }
 
   // Ouvrir la fenêtre de création
@@ -82,30 +79,26 @@ export class SurveyComponent implements OnInit {
     this.submitted = false;
     this.modalMode = "CREATE";
     //this.recipientForm.reset();
-    this.router.navigate(['/surveys/creation']);
+    this.router.navigate(['/surveys/edit']);
   }
 
-
-
-  // Supprimer un recipient
+  // Supprimer une enquete
   deleteEnquete(enquete: Survey) {
     this.surveyService.deleteSurvey(enquete.id).subscribe({
       next: (data: any) => {
-        console.log('Enquete supprimé avec succès :', data);
+        console.log('Enquête supprimée avec succès :', data);
         this.enquetes = this.enquetes.filter(r => r.id !== enquete.id);
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquete supprimé avec succès' });
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête supprimée avec succès' });
       },
       error: (err: any) => {
-        console.error('Erreur lors de la suppression  :', err);
+        console.error('Erreur lors de la suppression :', err);
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression' });
       }
     });
   }
 
-
   globalSearch(event: Event):void{
     const target = (event.target as HTMLInputElement);
     this.dt.filterGlobal(target.value, 'contains');
   }
-
 }

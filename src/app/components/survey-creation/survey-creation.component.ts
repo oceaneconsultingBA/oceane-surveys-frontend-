@@ -11,12 +11,23 @@ import { SurveyService } from '../../services/survey-service.service';
 import { SurveyStatus } from '../../models/survey-status';
 import { Question } from '../../models/question';
 import { Survey } from '../../models/survey';
-import { RecipientService } from '../../services/recipient-service.service';
-
+import { ActivatedRoute } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-survey-creation',
-  imports: [StepsModule, ButtonModule, ReactiveFormsModule, TableModule, CommonModule,
-    RecipientComponent, DropdownModule, QuestionsComponent],
+  imports: [
+    ToastModule,
+    StepsModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    TableModule,
+    CommonModule,
+    RecipientComponent,
+    DropdownModule,
+    QuestionsComponent
+  ],
   templateUrl: './survey-creation.component.html',
   styleUrl: './survey-creation.component.scss'
 })
@@ -27,7 +38,11 @@ export class SurveyCreationComponent {
   activeStep = 0;
   surveyForm: FormGroup;
   questions: any[] = [];
+  previousRecipients: number[] = [];
+  questionDTOs = null as unknown as Question[];
+  surveyId = null as unknown as number;
 
+  creationDate = null as unknown as Date;
   description: string = '';
   enqueteTypes = [
     { label: 'Satisfaction Consultant', value: 'satisfaction_consultant' },
@@ -50,19 +65,45 @@ export class SurveyCreationComponent {
   constructor(
     private fb: FormBuilder,
     private surveyService: SurveyService,
-    private recipientService: RecipientService
+    private messageService: MessageService,
+    private route: ActivatedRoute
   ) {
+    console.log("Chargement des champs de formulaire");
     this.surveyForm = this.fb.group({
       surveyName: ['', Validators.required],
       description: [null, Validators.required],
       enqueteType: [null, Validators.required],
       frequencies: ['', Validators.required]
     });
+    
+    console.log("Chargement des paramètres de page");
+    // Get the current route and its query parameters
+    this.route.queryParams.pipe(
+      filter(params => params['survey-id'])
+    )
+    .subscribe(params => {
+      // Read the query parameters
+      this.surveyId = params['survey-id'];
+      console.log('this.surveyId : ' + this.surveyId);
+
+      if (this.surveyId) {
+        console.log("Chargement de l'enquête déjà créée");
+        this.surveyService.getSurvey(this.surveyId).subscribe(response => {
+          console.log('Chargement des ' + response.questions.length + " question(s) de l'enquête déjà créée");
+          this.surveyForm.controls['surveyName'].setValue(response.title);
+          this.surveyForm.controls['description'].setValue(response.description);
+          this.creationDate = response.creationDate;
+          this.questionDTOs = response.questions;
+          this.previousRecipients = response.recipientIds;
+        });
+      }
+    });
   }
 
   nextStep() {
     if (this.activeStep < this.steps.length - 1) {
       this.activeStep++;
+
       this.update();
     }
   }
@@ -70,11 +111,24 @@ export class SurveyCreationComponent {
   prevStep() {
     if (this.activeStep > 0) {
       this.activeStep--;
+
       this.update();
     }
   }
 
   update() {
+    if (this.questionDTOs !== null) {
+      console.log('Chargement des ' + this.questionDTOs.length + ' question(s) déjà créée(s)');
+      this.questionsComponent.setQuestionDTOs(this.questionDTOs);
+      this.questionDTOs = null as unknown as Question[];
+    }
+
+    if (this.previousRecipients !== null) {
+      console.log('Chargement des ' + this.previousRecipients.length + ' destinataire(s) déjà créée(s)');
+      this.recipientsComponent.setSelectedRecipients(this.previousRecipients);
+      this.previousRecipients = null as unknown as number[];
+    }
+    
     this.questionSummary.setQuestionDTOs(this.questionsComponent.getQuestionDTOs());
   }
 
@@ -90,27 +144,49 @@ export class SurveyCreationComponent {
     this.questions = this.questions.filter(q => q !== question);
   }
   
-save() {
-  let survey: Survey = {
-    id: undefined as unknown as number,
-    title: this.surveyForm.controls['surveyName'].value,
-    description: this.surveyForm.controls['description'].value,
-    creationDate: new Date(),
-    lastModifiedDate: new Date(),
-    status: SurveyStatus.DRAFT,
-    questions: this.questionsComponent.getQuestionDTOs() as Question[]
+  save() {
+    this.persist(SurveyStatus.DRAFT);
   }
-  this.surveyService.createSurvey(survey).subscribe(response => {
-    let surveyId = response.id;
-    this.addRecipient(surveyId, 0);
-  });
+  
+  publish() {
+    this.persist(SurveyStatus.ACTIVE);
   }
-
-  private addRecipient(surveyId: number, index: number) {
-    this.recipientService.addRecipientToSurvey(this.recipientsComponent.getSelectedRecipients()[index], surveyId).subscribe(response => {
-      if (index < this.recipientsComponent.getSelectedRecipients().length - 1) {
-        this.addRecipient(surveyId, index + 1);
-      }
-    });
+  
+  private persist(status: SurveyStatus) {
+    if (!this.creationDate) {
+      this.creationDate = new Date();
+    }
+  
+    let survey: Survey = {
+      id: undefined as unknown as number,
+      title: this.surveyForm.controls['surveyName'].value,
+      description: this.surveyForm.controls['description'].value,
+      creationDate: this.creationDate,
+      lastModifiedDate: new Date(),
+      status: status,
+      recipientIds: this.recipientsComponent.getSelectedRecipients(),
+      questions: this.questionsComponent.getQuestionDTOs() as Question[]
+    }
+  
+    if (this.surveyId) {
+      this.surveyService.updateSurvey(this.surveyId, survey).subscribe(
+        {next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête modifiée avec succès' });
+      },
+      error: (err: any) => {
+        console.error("Échec de la modification de l'enquête :", err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Échec de la modification de l'enquête" });
+      }});
+    } else {
+      this.surveyService.createSurvey(survey).subscribe(
+        {next: response => {
+        this.surveyId = response.id;
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête créé avec succès' });
+      },
+      error: (err: any) => {
+        console.error("Échec de la création de l'enquête :", err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Échec de la création de l'enquête" });
+      }});
+    }
   }
 }

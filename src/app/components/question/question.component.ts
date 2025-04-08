@@ -55,9 +55,7 @@ export class QuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.editable) {
-      this.setQuestionDTO(this.question);
-    }
+    this.setQuestionDTO(this.question);
   }
 
   getQuestionDTO(): Question {

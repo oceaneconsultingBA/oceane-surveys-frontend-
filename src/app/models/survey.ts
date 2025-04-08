@@ -8,5 +8,6 @@ export interface Survey {
     creationDate: Date;
     lastModifiedDate: Date;
     status: SurveyStatus;
+    recipientIds: number[];
     questions: Question[];
 }

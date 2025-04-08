@@ -1,4 +1,5 @@
 <div class="card">
+  <p-toast></p-toast>
 
 <p-steps [model]="steps" [(activeIndex)]="activeStep" styleClass="mb-5"></p-steps>
 
@@ -13,7 +14,7 @@
           <!-- Description -->
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea id="description" pInputTextarea formControlName="description" placeholder="Entrez une description ici..." rows="4"></textarea>
+            <textarea id="description" pTextarea formControlName="description" placeholder="Entrez une description ici..." rows="4"></textarea>
           </div>
     
           <!-- Type d'enquête -->
@@ -79,13 +80,15 @@
 </div>
 
 <div class="flex justify-between mt-4">
-    <p-button label="Précédent" icon="pi pi-chevron-left" (click)="prevStep()" [disabled]="activeStep === 0"></p-button>
-    &nbsp;
-    <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" [disabled]="activeStep === steps.length - 1"></p-button>
+  <p-button label="Sauvegarder brouillon" icon="pi" (click)="save()"></p-button>
+  &nbsp;
+  <p-button label="Finaliser et activer" icon="pi" (click)="publish()" *ngIf="activeStep === 3"></p-button>
 </div>
 <br/>
 <div class="flex justify-between mt-4">
-    <p-button label="Sauvegarder" icon="pi" (click)="save()" *ngIf="activeStep === 3"></p-button>
+    <p-button label="Précédent" icon="pi pi-chevron-left" (click)="prevStep()" [disabled]="activeStep === 0"></p-button>
+    &nbsp;
+    <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" [disabled]="activeStep === steps.length - 1"></p-button>
 </div>
 
 </div>

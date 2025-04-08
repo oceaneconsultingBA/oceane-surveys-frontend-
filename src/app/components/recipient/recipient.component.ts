@@ -111,6 +111,10 @@ export class RecipientComponent implements OnInit {
     return this.selectedRecipients;
   }
 
+  setSelectedRecipients(previousRecipients: number[]) {
+    this.selectedRecipients = this.recepients.filter(q => previousRecipients.includes(q.id));
+  }
+
   // Pour la soumission du formulaire
   onSubmit() {
     if (this.recipientForm.valid) {
@@ -130,14 +134,14 @@ export class RecipientComponent implements OnInit {
     this.recipientService.createRecipient(recipient).subscribe({
       next: (newRecipient: any) => {
         console.log('Recipient créé avec succès :', newRecipient);
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Recipient créé avec succès' });
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Destinataire créé avec succès' });
         this.recepients.push(newRecipient);
         this.recipientForm.reset(); // Réinitialiser le formulaire après la création
         this.recepientDialog = false;
       },
       error: (err: any) => {
         console.error('Erreur lors de la création du recipient :', err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la création du recipient' });
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la création du destinataire' });
       }
     });
   }
@@ -147,7 +151,7 @@ export class RecipientComponent implements OnInit {
     this.recipientService.updateRecipient(recipient.id, recipient).subscribe({
       next: (newRecipient: any) => {
         console.log('Recipient mis à jour avec succès :', newRecipient);
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Recipient mis à jour avec succès' });
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Destinataire mis à jour avec succès' });
         const index = this.recepients.findIndex(recipient => recipient.id === newRecipient.id);
   
         if (index !== -1) {
@@ -161,8 +165,8 @@ export class RecipientComponent implements OnInit {
         this.recipientForm.reset(); // Réinitialiser le formulaire après la mise à jour
       },
       error: (err: any) => {
-        console.error('Erreur lors de la mise à jour du recipient :', err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la mise à jour du recipient' });
+        console.error('Erreur lors de la mise à jour du destinataire :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la mise à jour du destinataire' });
       }
     });
   }
@@ -195,12 +199,12 @@ export class RecipientComponent implements OnInit {
       next: (newRecipient: any) => {
         console.log('Recipient supprimé avec succès :', newRecipient);
         this.recepients = this.recepients.filter(r => r.id !== recipient.id);
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Recipient supprimé avec succès' });
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Destinataire supprimé avec succès' });
         this.recipientForm.reset(); // Réinitialiser le formulaire après la suppression
       },
       error: (err: any) => {
-        console.error('Erreur lors de la suppression du recipient :', err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression du recipient' });
+        console.error('Erreur lors de la suppression du destinataire :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression du destinataire' });
       }
     });
   }

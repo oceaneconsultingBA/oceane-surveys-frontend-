@@ -6,7 +6,7 @@
     <p-dropdown *ngIf="editable" id="questionType" formControlName="questionType" [options]="questionTypes" placeholder="Sélectionner un type"></p-dropdown>
 
     <label for="questionText">Texte de la question*</label>
-    <textarea *ngIf="editable" id="questionText" pInputTextarea formControlName="questionText" placeholder="Entrez une question ici..." rows="2"></textarea>
+    <textarea *ngIf="editable" id="questionText" pTextarea formControlName="questionText" placeholder="Entrez une question ici..." rows="2"></textarea>
     <span *ngIf="!editable">{{questionForm.controls['questionText'].value}}</span>
 
     <div *ngIf="['choix-unique', 'choix-multiple'].includes(questionForm.controls['questionType'].value)">
@@ -20,7 +20,7 @@
         <span *ngIf="!editable">{{questionForm.controls['selectedResponses'].value}}</span>
 
         <div *ngIf="editable" class="add-option">
-            <textarea id="newOption" pInputTextarea formControlName="newOption" placeholder="Ajouter une option..." rows="2"></textarea>
+            <textarea id="newOption" pTextarea formControlName="newOption" placeholder="Ajouter une option..." rows="2"></textarea>
             <p-button label="Ajouter" icon="pi pi-plus" (click)="addOption()"></p-button>
         </div>
 
@@ -34,7 +34,7 @@
 
     <div *ngIf="!editable && questionType === 'texte'">
         <label>Réponse :</label>
-        <textarea id="textResponse" pInputTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
+        <textarea id="textResponse" pTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
     </div>
 
     <div *ngIf="questionType === 'rating'" class="rating">
