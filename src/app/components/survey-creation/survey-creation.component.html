@@ -7,7 +7,7 @@
     <h3>Étape 1 : Informations générales</h3>
     <form [formGroup]="surveyForm">
         <div class="form-group">
-            <label for="surveyName">Nom du Survey</label>
+            <label for="surveyName">Nom de l'enquête</label>
             <input pInputText id="surveyName" formControlName="surveyName" placeholder="Entrez le titre de l'enquête" />
           </div>
     
@@ -45,7 +45,7 @@
   <h3>Étape 4 : Aperçu & Validation</h3>
   <h4>Informations générales</h4>
     <div class="form-group">
-        <label for="surveyName">Nom du Survey</label>
+        <label for="surveyName">Nom de l'enquête</label>
         <span>{{surveyForm.controls['surveyName'].value}}</span>
       </div>
 

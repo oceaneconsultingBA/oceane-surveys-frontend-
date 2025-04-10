@@ -18,7 +18,7 @@ html, body {
 .sidenav-container {
   display: flex;
   flex: 1;
-  height: 80vh;
+  height: 100%;
 }
 
 mat-sidenav {
@@ -33,7 +33,7 @@ mat-sidenav-content {
   flex-grow: 1;
   width: 100%; /* Le reste de l’espace */
   padding: 10px;
-  height: 80vh;
+  height: 100%;
 }
 
 .content {

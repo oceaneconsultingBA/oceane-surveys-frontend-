@@ -19,10 +19,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-survey',
   imports: [
+    ToastModule,
     TableModule,
     ButtonModule,
     SelectModule,
-    ToastModule,
     ToolbarModule,
     InputTextModule,
     TextareaModule,
@@ -84,9 +84,10 @@ export class SurveyComponent implements OnInit {
 
   // Supprimer une enquete
   deleteEnquete(enquete: Survey) {
+    console.log('Enquête à supprimer : ' + enquete.id);
     this.surveyService.deleteSurvey(enquete.id).subscribe({
-      next: (data: any) => {
-        console.log('Enquête supprimée avec succès :', data);
+      next: () => {
+        console.log('Enquête supprimée avec succès :' + enquete.id);
         this.enquetes = this.enquetes.filter(r => r.id !== enquete.id);
         this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête supprimée avec succès' });
       },

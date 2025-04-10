@@ -7,6 +7,7 @@
         <ng-template #end>
             <p-fileUpload mode="basic" accept=".xls, .xlsx" (onSelect)="onFileSelect($event)" customUpload="true" 
              [maxFileSize]="1000000" label="Import" chooseLabel="Import" auto customUpload class="mr-2 inline-block"  />
+             &nbsp;
             <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
         </ng-template>
     </p-toolbar>
@@ -34,8 +35,8 @@
         <ng-template #header>
             <tr>
                 <th></th>
-                <th pSortableColumn="firstName">Nom <p-sortIcon field="firstName" /></th>
-                <th pSortableColumn="lastName">Prénom <p-sortIcon field="lastName" /></th>
+                <th pSortableColumn="lastName">Nom <p-sortIcon field="lastName" /></th>
+                <th pSortableColumn="firstName">Prénom <p-sortIcon field="firstName" /></th>
                 <th>Email</th>
                 <th pSortableColumn="company">Compagnie <p-sortIcon field="company" /></th>
                 <th pSortableColumn="type">Type <p-sortIcon field="type" /></th>
@@ -48,8 +49,8 @@
                       <p-tableCheckbox [value]="rc">
                   </p-tableCheckbox>
                 </td>
-                <td>{{ rc.firstName }}</td>
                 <td>{{ rc.lastName }}</td>
+                <td>{{ rc.firstName }}</td>
                 <td>{{ rc.email }}</td>
                 <td>{{ rc.company }}</td>
                 <td>{{ rc.type }}</td>

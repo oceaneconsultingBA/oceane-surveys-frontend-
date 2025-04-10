@@ -11,28 +11,27 @@
 
     <div *ngIf="['choix-unique', 'choix-multiple'].includes(questionForm.controls['questionType'].value)">
         <label>Options de réponse*</label>
-        <p-listbox
-            *ngIf="editable"
-            [options]="responseOptions" 
-            formControlName="selectedResponses" 
-            [multiple]="questionType === 'choix-multiple'">
-        </p-listbox>
-        <span *ngIf="!editable">{{questionForm.controls['selectedResponses'].value}}</span>
-
         <div *ngIf="editable" class="add-option">
             <textarea id="newOption" pTextarea formControlName="newOption" placeholder="Ajouter une option..." rows="2"></textarea>
             <p-button label="Ajouter" icon="pi pi-plus" (click)="addOption()"></p-button>
         </div>
 
-        <ul>
+        <ul *ngIf="editable">
             <li *ngFor="let option of responseOptions; let i = index">
                 <span>{{ option }}</span>
-                <p-button *ngIf="editable" icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeOption(i)"></p-button>
+                <p-button icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeOption(i)"></p-button>
             </li>
         </ul>
+        
+        <p-listbox
+            *ngIf="!editable"
+            [options]="responseOptions" 
+            formControlName="selectedResponses" 
+            [multiple]="questionForm.controls['questionType'].value === 'choix-multiple'">
+        </p-listbox>
     </div>
 
-    <div *ngIf="!editable && questionType === 'texte'">
+    <div *ngIf="!editable && questionForm.controls['questionType'].value === 'texte'">
         <label>Réponse :</label>
         <textarea id="textResponse" pTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
     </div>
