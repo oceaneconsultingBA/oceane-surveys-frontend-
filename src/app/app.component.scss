@@ -50,6 +50,10 @@ mat-sidenav-content {
   margin-top: 10px;
 }
 
+.active {
+  font-weight: bold;
+}
+
 .footer {
   text-align: center;
   padding: 10px;
@@ -59,6 +63,7 @@ mat-sidenav-content {
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: 1000;
 }
 
 @media (max-width: 768px) {

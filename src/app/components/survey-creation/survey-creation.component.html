@@ -42,7 +42,7 @@
 </div>
 
 <div [style.display]="activeStep === 3 ? 'block' : 'none'">
-  <h3>Étape 4 : Aperçu & Validation</h3>
+  <h3>Étape 4 : Prévisualisation & Validation</h3>
   <h4>Informations générales</h4>
     <div class="form-group">
         <label for="surveyName">Nom de l'enquête</label>
@@ -74,21 +74,21 @@
     <h4>Destinataires</h4>
     <ul *ngIf="recipientsComponent?.getSelectedRecipients()">
         <li *ngFor="let selectedRecipient of recipientsComponent.getSelectedRecipients()">
-            <span>{{ selectedRecipient.firstName }} {{ selectedRecipient.lastName }}</span>
+            <span>{{ selectedRecipient.firstName }} {{ selectedRecipient.lastName }} {{ selectedRecipient.email }}</span>
         </li>
     </ul>
 </div>
 
-<div class="flex justify-between mt-4">
-  <p-button label="Sauvegarder brouillon" icon="pi" (click)="save()"></p-button>
-  &nbsp;
-  <p-button label="Finaliser et activer" icon="pi" (click)="publish()" *ngIf="activeStep === 3"></p-button>
-</div>
-<br/>
-<div class="flex justify-between mt-4">
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button label="Enregistrer brouillon" icon="pi" (click)="save()"></p-button>
+  </ng-template>
+  <ng-template #end>
     <p-button label="Précédent" icon="pi pi-chevron-left" (click)="prevStep()" [disabled]="activeStep === 0"></p-button>
     &nbsp;
-    <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" [disabled]="activeStep === steps.length - 1"></p-button>
-</div>
+    <p-button label="Suivant" icon="pi pi-chevron-right" (click)="nextStep()" *ngIf="activeStep !== steps.length - 1"></p-button>
+    <p-button label="Enregistrer et publier" icon="pi" (click)="publish()" *ngIf="activeStep === steps.length - 1"></p-button>
+  </ng-template>
+</p-toolbar>
 
 </div>

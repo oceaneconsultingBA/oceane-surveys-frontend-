@@ -70,7 +70,7 @@ export class SurveyComponent implements OnInit {
 
   // Modifier un recipient existant
   editeEnquete(enquete: Survey) {
-    this.router.navigate(['/surveys/edit'], {queryParams: {'survey-id': enquete.id}});
+    this.router.navigate(['/surveys-edit'], {queryParams: {'survey-id': enquete.id}});
   }
 
   // Ouvrir la fenêtre de création
@@ -79,7 +79,7 @@ export class SurveyComponent implements OnInit {
     this.submitted = false;
     this.modalMode = "CREATE";
     //this.recipientForm.reset();
-    this.router.navigate(['/surveys/edit']);
+    this.router.navigate(['/surveys-edit']);
   }
 
   // Supprimer une enquete

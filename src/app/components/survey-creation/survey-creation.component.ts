@@ -15,10 +15,12 @@ import { ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
 @Component({
   selector: 'app-survey-creation',
   imports: [
     ToastModule,
+    ToolbarModule,
     StepsModule,
     ButtonModule,
     ReactiveFormsModule,
@@ -164,7 +166,7 @@ export class SurveyCreationComponent {
       creationDate: this.creationDate,
       lastModifiedDate: new Date(),
       status: status,
-      recipientIds: this.recipientsComponent.getSelectedRecipients(),
+      recipientIds: this.recipientsComponent.getSelectedRecipients().map(e => e.id),
       questions: this.questionsComponent.getQuestionDTOs() as Question[]
     }
   
