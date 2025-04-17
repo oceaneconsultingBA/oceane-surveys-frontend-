@@ -1,0 +1,14 @@
+<div *ngIf="editable" class="actions">
+    <p-button label="Ajouter une question" (click)="addQuestion()" class="p-button-primary"></p-button>
+</div>
+<br/>
+<div *ngFor="let question of questions; let i = index">
+    <div class="actions">
+        <p-button *ngIf="editable" label="Supprimer cette question" (click)="removeQuestion(i)" class="p-button-primary"></p-button>
+    </div>
+    <br/>
+    <app-question #questionComponent [order]="i" [editable]="editable" [question]="question">
+    </app-question>
+    <br/>
+    <br/>
+</div>

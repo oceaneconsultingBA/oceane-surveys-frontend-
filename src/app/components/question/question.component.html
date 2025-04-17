@@ -1,1 +1,44 @@
-<p>question works!</p>
+<div class="question-container">
+    <form [formGroup]="questionForm">
+    <h3>Question</h3>
+
+    <label *ngIf="editable" for="questionType">Type de question*</label>
+    <p-dropdown *ngIf="editable" id="questionType" formControlName="questionType" [options]="questionTypes" placeholder="Sélectionner un type"></p-dropdown>
+
+    <label for="questionText">Texte de la question*</label>
+    <textarea *ngIf="editable" id="questionText" pTextarea formControlName="questionText" placeholder="Entrez une question ici..." rows="2"></textarea>
+    <span *ngIf="!editable">{{questionForm.controls['questionText'].value}}</span>
+
+    <div *ngIf="['choix-unique', 'choix-multiple'].includes(questionForm.controls['questionType'].value)">
+        <label>Options de réponse*</label>
+        <div *ngIf="editable" class="add-option">
+            <textarea id="newOption" pTextarea formControlName="newOption" placeholder="Ajouter une option..." rows="2"></textarea>
+            <p-button label="Ajouter" icon="pi pi-plus" (click)="addOption()"></p-button>
+        </div>
+
+        <ul *ngIf="editable">
+            <li *ngFor="let option of responseOptions; let i = index">
+                <span>{{ option }}</span>
+                <p-button icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeOption(i)"></p-button>
+            </li>
+        </ul>
+        
+        <p-listbox
+            *ngIf="!editable"
+            [options]="responseOptions" 
+            formControlName="selectedResponses" 
+            [multiple]="questionForm.controls['questionType'].value === 'choix-multiple'">
+        </p-listbox>
+    </div>
+
+    <div *ngIf="!editable && questionForm.controls['questionType'].value === 'texte'">
+        <label>Réponse :</label>
+        <textarea id="textResponse" pTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
+    </div>
+
+    <div *ngIf="questionType === 'rating'" class="rating">
+        <label>Note :</label>
+        <p-rating formControlName="rating"></p-rating>
+    </div>
+    </form>
+</div>

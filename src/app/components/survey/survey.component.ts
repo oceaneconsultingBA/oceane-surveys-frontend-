@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Survey } from '../../models/survey';
-import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Recipient } from '../../models/recipient';
-import { RecipientType } from '../../models/recipient-type';
-import { RecipientService } from '../../services/recipient-service.service';
 import { SurveyStatus } from '../../models/survey-status';
 import { Question } from '../../models/question';
 import { SurveyService } from '../../services/survey-service.service';
@@ -18,14 +14,15 @@ import { CommonModule } from '@angular/common';
 import { SelectModule } from 'primeng/select';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-survey',
   imports: [
+    ToastModule,
     TableModule,
     ButtonModule,
     SelectModule,
-    ToastModule,
     ToolbarModule,
     InputTextModule,
     TextareaModule,
@@ -48,13 +45,13 @@ export class SurveyComponent implements OnInit {
 
   constructor(
     private messageService: MessageService,
-    private surveyService: SurveyService
+    private surveyService: SurveyService,
+    private router: Router
   ) {
 
   }
 
   ngOnInit(): void {
-    const questions: Question[] = []; 
     this.getSurveys();
   }
 
@@ -70,12 +67,10 @@ export class SurveyComponent implements OnInit {
       }
     });
   }
-  
-
 
   // Modifier un recipient existant
   editeEnquete(enquete: Survey) {
-
+    this.router.navigate(['/surveys-edit'], {queryParams: {'survey-id': enquete.id}});
   }
 
   // Ouvrir la fenêtre de création
@@ -84,29 +79,27 @@ export class SurveyComponent implements OnInit {
     this.submitted = false;
     this.modalMode = "CREATE";
     //this.recipientForm.reset();
+    this.router.navigate(['/surveys-edit']);
   }
 
-
-
-  // Supprimer un recipient
+  // Supprimer une enquete
   deleteEnquete(enquete: Survey) {
+    console.log('Enquête à supprimer : ' + enquete.id);
     this.surveyService.deleteSurvey(enquete.id).subscribe({
-      next: (data: any) => {
-        console.log('Enquete supprimé avec succès :', data);
+      next: () => {
+        console.log('Enquête supprimée avec succès :' + enquete.id);
         this.enquetes = this.enquetes.filter(r => r.id !== enquete.id);
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquete supprimé avec succès' });
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête supprimée avec succès' });
       },
       error: (err: any) => {
-        console.error('Erreur lors de la suppression  :', err);
+        console.error('Erreur lors de la suppression :', err);
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression' });
       }
     });
   }
 
-
   globalSearch(event: Event):void{
     const target = (event.target as HTMLInputElement);
     this.dt.filterGlobal(target.value, 'contains');
   }
-
 }

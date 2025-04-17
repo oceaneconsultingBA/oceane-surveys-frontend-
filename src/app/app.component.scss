@@ -18,7 +18,7 @@ html, body {
 .sidenav-container {
   display: flex;
   flex: 1;
-  height: 80vh;
+  height: 100%;
 }
 
 mat-sidenav {
@@ -33,7 +33,7 @@ mat-sidenav-content {
   flex-grow: 1;
   width: 100%; /* Le reste de l’espace */
   padding: 10px;
-  height: 80vh;
+  height: 100%;
 }
 
 .content {
@@ -50,6 +50,10 @@ mat-sidenav-content {
   margin-top: 10px;
 }
 
+.active {
+  font-weight: bold;
+}
+
 .footer {
   text-align: center;
   padding: 10px;
@@ -59,6 +63,7 @@ mat-sidenav-content {
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: 1000;
 }
 
 @media (max-width: 768px) {
