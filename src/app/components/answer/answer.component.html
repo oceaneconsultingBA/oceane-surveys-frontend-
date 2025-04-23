@@ -1,0 +1,33 @@
+<div class="card">
+  <p-toast></p-toast>
+
+<div *ngIf="activeStep === 0">
+    <h3>Informations générales</h3>
+    <form [formGroup]="surveyForm">
+        <div class="form-group">
+            <label for="surveyName">Nom de l'enquête</label>
+            <span>{{surveyForm.controls['surveyName'].value}}</span>
+          </div>
+    
+          <!-- Description -->
+          <div class="form-group">
+            <label for="description">Description</label>
+            <span>{{surveyForm.controls['description'].value}}</span>
+          </div>
+    </form>
+</div>
+
+<div [style.display]="activeStep === 1 ? 'block' : 'none'">
+  <h3>Questionnaire</h3>
+    <!-- <p>{{questionSummary.getQuestionDTOs() | json}}</p> -->
+    <app-questions #questionSummary [editable]="false"></app-questions>
+</div>
+
+<p-toolbar styleClass="mb-6">
+  <ng-template #end>
+    <p-button label="Commencer" icon="pi pi-chevron-right" (click)="nextStep()" *ngIf="activeStep !== steps.length - 1"></p-button>
+    <p-button label="Envoyer" icon="pi" (click)="publish()" *ngIf="activeStep === steps.length - 1"></p-button>
+  </ng-template>
+</p-toolbar>
+
+</div>

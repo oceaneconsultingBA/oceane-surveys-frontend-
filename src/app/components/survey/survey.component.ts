@@ -73,6 +73,11 @@ export class SurveyComponent implements OnInit {
     this.router.navigate(['/surveys-edit'], {queryParams: {'survey-id': enquete.id}});
   }
 
+  // Modifier un recipient existant
+  repondEnquete(enquete: Survey) {
+    this.router.navigate(['/answer'], {queryParams: {'survey-id': enquete.id}});
+  }
+
   // Ouvrir la fenêtre de création
   openNew() {
     //this.recepientDialog = true;

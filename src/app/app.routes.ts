@@ -4,11 +4,13 @@ import { HomeComponent } from './components/home/home.component';
 import { SurveyCreationComponent } from './components/survey-creation/survey-creation.component';
 import { RecipientComponent } from './components/recipient/recipient.component';
 import { SurveyComponent } from './components/survey/survey.component';
+import { AnswerComponent } from './components/answer/answer.component';
 
 
 export const routes: Routes = [
   { path: 'dashboard', component: HomeComponent },
   { path: 'surveys-edit', component: SurveyCreationComponent },
+  { path: 'answer', component: AnswerComponent },
   { path: 'surveys', component: SurveyComponent },
   { path: 'recipients', component: RecipientComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
