@@ -10,6 +10,7 @@ import { Question } from '../../models/question';
 import { QuestionType } from '../../models/question-type';
 import { Survey } from '../../models/survey';
 import { QuestionOption } from '../../models/question-option';
+import { Answer } from '../../models/answer';
 
 @Component({
   selector: 'app-question',
@@ -98,6 +99,46 @@ export class QuestionComponent implements OnInit {
       survey: null as unknown as Survey,
       options: questionOptions
     } as Question;
+  }
+
+  getAnswerDTO(): Answer {
+    let questionTypeEnum: QuestionType;
+    switch (this.questionForm.controls['questionType'].value) {
+      case 'choix-unique': {
+        questionTypeEnum = QuestionType.SINGLE_CHOICE;
+        break;
+      }
+      case 'choix-multiple': {
+        questionTypeEnum = QuestionType.MULTIPLE_CHOICE;
+        break;
+      }
+      case 'texte': {
+        questionTypeEnum = QuestionType.TEXT;
+        break;
+      }
+      case 'rating': {
+        questionTypeEnum = QuestionType.RATING;
+        break;
+      }
+      default: {
+        questionTypeEnum = QuestionType.TEXT;
+        break;
+      }
+    }
+    let questionOptions: QuestionOption[] = ((this.questionForm.controls['selectedResponses'].value) as string[]).map(e => ({
+      id: undefined as unknown as number,
+      text: e,
+      displayOrder: 0,
+      question: undefined as unknown as Question
+    } as QuestionOption));
+    return {
+      id: undefined as unknown as number,
+      recipient_id: 1/* TODO Add recipient */ as unknown as number,
+      question: this.getQuestionDTO(),
+      text: this.questionForm.controls['textResponse'].value,
+      rating: +this.questionForm.controls['rating'].value,
+      options: questionOptions
+    } as Answer;
   }
 
   setQuestionDTO(questionObject: Question) {

@@ -5,7 +5,6 @@ import { StepsModule } from 'primeng/steps';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
-import { RecipientComponent } from "../recipient/recipient.component";
 import { QuestionsComponent } from "../questions/questions.component"; 
 import { SurveyService } from '../../services/survey-service.service';
 import { SurveyStatus } from '../../models/survey-status';
@@ -16,6 +15,7 @@ import { filter } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+
 @Component({
   selector: 'app-answer',
   imports: [
@@ -26,10 +26,9 @@ import { ToolbarModule } from 'primeng/toolbar';
     ReactiveFormsModule,
     TableModule,
     CommonModule,
-    RecipientComponent,
     DropdownModule,
     QuestionsComponent
-  ],
+],
   templateUrl: './answer.component.html',
   styleUrl: './answer.component.scss'
 })
