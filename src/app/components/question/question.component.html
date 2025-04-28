@@ -35,7 +35,7 @@
 
     <div *ngIf="!editable && questionForm.controls['questionType'].value === 'texte'">
         <label *ngIf="editable">Réponse :</label>
-        <textarea id="textResponse" pInputTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
+        <textarea style="width: 100%;" id="textResponse" pInputTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
     </div>
 
     <div *ngIf="questionType === 'rating'" class="rating">
