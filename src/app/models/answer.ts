@@ -3,7 +3,7 @@ import { QuestionOption } from "./question-option";
 
 export interface Answer {
     id: number;
-    recipient_id: number;
+    recipientId: number;
     text: string;
     rating: number;
     question: Question;

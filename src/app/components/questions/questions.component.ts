@@ -11,6 +11,7 @@ import { Question } from '../../models/question';
 import { Survey } from '../../models/survey';
 import { QuestionOption } from '../../models/question-option';
 import { QuestionType } from '../../models/question-type';
+import { Answer } from '../../models/answer';
 
 @Component({
   selector: 'app-questions',
@@ -36,6 +37,10 @@ export class QuestionsComponent {
   
   getQuestionDTOs(): Question[] {
     return this.questionComponents?.toArray().map(e => e.getQuestionDTO());
+  }
+  
+  getAnswerDTOs(): Answer[] {
+    return this.questionComponents?.toArray().map(e => e.getAnswerDTO());
   }
   
   setQuestionDTOs(input: Question[]) {

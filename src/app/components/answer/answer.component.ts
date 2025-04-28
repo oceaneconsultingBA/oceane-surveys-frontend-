@@ -15,6 +15,8 @@ import { filter } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { AnswerService } from '../../services/answer-service.service';
+import { Answer } from '../../models/answer';
 
 @Component({
   selector: 'app-answer',
@@ -33,7 +35,7 @@ import { ToolbarModule } from 'primeng/toolbar';
   styleUrl: './answer.component.scss'
 })
 export class AnswerComponent {
-  @ViewChild('questionSummary') questionSummary!: QuestionsComponent;
+  @ViewChild('questionList') questionList!: QuestionsComponent;
   activeStep = 0;
   surveyForm: FormGroup;
   questions: any[] = [];
@@ -62,6 +64,7 @@ export class AnswerComponent {
   constructor(
     private fb: FormBuilder,
     private surveyService: SurveyService,
+    private answerService: AnswerService,
     private messageService: MessageService,
     private route: ActivatedRoute
   ) {
@@ -116,7 +119,7 @@ export class AnswerComponent {
   update() {
     if (this.questionDTOs !== null) {
       console.log('Chargement des ' + this.questionDTOs.length + ' question(s) déjà créée(s)');
-      this.questionSummary.setQuestionDTOs(this.questionDTOs);
+      this.questionList.setQuestionDTOs(this.questionDTOs);
       this.questionDTOs = null as unknown as Question[];
     }
   }
@@ -133,49 +136,35 @@ export class AnswerComponent {
     this.questions = this.questions.filter(q => q !== question);
   }
   
-  save() {
-    this.persist(SurveyStatus.DRAFT);
-  }
-  
   publish() {
-    this.persist(SurveyStatus.ACTIVE);
-  }
-  
-  private persist(status: SurveyStatus) {
-    if (!this.creationDate) {
-      this.creationDate = new Date();
+    let map = new Map<number, any>();
+
+
+
+    let questions = this.questionList.getQuestionDTOs();
+    let answers = this.questionList.getAnswerDTOs();
+    console.log(questions.length + " question(s) et " + answers.length + " réponse(s)");
+
+    let answersByQuestionId = new Map<number, Answer>();
+
+    for (let i = 0; i < questions.length; i++) {
+      let question = questions[i];
+      let answer = answers[i];
+      let questionId: number = question.id;
+
+      console.log("Nouvelle entrée " + JSON.stringify(answer));
+      answersByQuestionId.set(questionId, answer);
     }
+
+    console.log(answersByQuestionId.size + " réponse(s) remplie(s) : " + JSON.stringify(Object.fromEntries(answersByQuestionId)));
   
-    let survey: Survey = {
-      id: undefined as unknown as number,
-      title: this.surveyForm.controls['surveyName'].value,
-      description: this.surveyForm.controls['description'].value,
-      creationDate: this.creationDate,
-      lastModifiedDate: new Date(),
-      status: status,
-      recipientIds: [],
-      questions: [] as Question[]
-    }
-  
-    if (this.surveyId) {
-      this.surveyService.updateSurvey(this.surveyId, survey).subscribe(
-        {next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête modifiée avec succès' });
-      },
-      error: (err: any) => {
-        console.error("Échec de la modification de l'enquête :", err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Échec de la modification de l'enquête" });
-      }});
-    } else {
-      this.surveyService.createSurvey(survey).subscribe(
-        {next: response => {
-        this.surveyId = response.id;
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête créé avec succès' });
-      },
-      error: (err: any) => {
-        console.error("Échec de la création de l'enquête :", err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Échec de la création de l'enquête" });
-      }});
-    }
+    this.answerService.saveAnswers(this.surveyId, Object.fromEntries(answersByQuestionId)).subscribe(
+      {next: () => {
+      this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête remplie avec succès' });
+    },
+    error: (err: any) => {
+      console.error("Échec du remplissage de l'enquête :", err);
+      this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Échec du remplissage de l'enquête" });
+    }});
   }
 }

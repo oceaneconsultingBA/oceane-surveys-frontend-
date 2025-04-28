@@ -42,6 +42,7 @@ export class QuestionComponent implements OnInit {
   ];
 
   responseOptions: string[] = [];
+  questionId = undefined as unknown as number;
   questionForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -90,7 +91,7 @@ export class QuestionComponent implements OnInit {
       question: undefined as unknown as Question
     } as QuestionOption));
     return {
-      id: undefined as unknown as number,
+      id: this.questionId,
       text: this.questionForm.controls['questionText'].value,
       type: questionTypeEnum,
       required: false,
@@ -133,7 +134,7 @@ export class QuestionComponent implements OnInit {
     } as QuestionOption));
     return {
       id: undefined as unknown as number,
-      recipient_id: 1/* TODO Add recipient */ as unknown as number,
+      recipientId: 1/* TODO Add recipient */ as unknown as number,
       question: this.getQuestionDTO(),
       text: this.questionForm.controls['textResponse'].value,
       rating: +this.questionForm.controls['rating'].value,
@@ -165,6 +166,7 @@ export class QuestionComponent implements OnInit {
       }
     }
 
+    this.questionId = questionObject.id;
     this.questionForm.controls['questionText'].setValue(questionObject.text);
     this.responseOptions = questionObject.options.map(e => e.text);
   }

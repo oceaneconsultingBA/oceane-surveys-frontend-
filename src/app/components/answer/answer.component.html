@@ -18,8 +18,7 @@
 </div>
 
 <div [style.display]="activeStep === 1 ? 'block' : 'none'">
-    <!-- <p>{{questionSummary.getQuestionDTOs() | json}}</p> -->
-    <app-questions #questionSummary [editable]="false"></app-questions>
+    <app-questions #questionList [editable]="false"></app-questions>
 </div>
 
 <p-toolbar styleClass="mb-6">
