@@ -137,10 +137,6 @@ export class AnswerComponent {
   }
   
   publish() {
-    let map = new Map<number, any>();
-
-
-
     let questions = this.questionList.getQuestionDTOs();
     let answers = this.questionList.getAnswerDTOs();
     console.log(questions.length + " question(s) et " + answers.length + " réponse(s)");

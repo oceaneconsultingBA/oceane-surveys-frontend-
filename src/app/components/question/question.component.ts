@@ -134,6 +134,7 @@ export class QuestionComponent implements OnInit {
     } as QuestionOption));
     return {
       id: undefined as unknown as number,
+      creationDate: new Date(),
       recipientId: 1/* TODO Add recipient */ as unknown as number,
       question: this.getQuestionDTO(),
       text: this.questionForm.controls['textResponse'].value,

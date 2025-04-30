@@ -39,10 +39,10 @@
                 <td>{{ rc.creationDate | date:'dd/MM/yyyy' }}</td>
                 <td>{{ rc.lastModifiedDate | date:'dd/MM/yyyy' }}</td>
                 <td [ngSwitch]="rc.status">
-                    <span *ngSwitchCase="0" class="status status-draft" >En pause</span>
-                    <span *ngSwitchCase="1" class="status status-active">Active</span>
-                    <span *ngSwitchCase="2" class="status status-completed">Complétée</span>
-                    <span *ngSwitchDefault>unknown</span>
+                    <span *ngSwitchCase="'DRAFT'" class="status status-draft" >En pause</span>
+                    <span *ngSwitchCase="'ACTIVE'" class="status status-active">Active</span>
+                    <span *ngSwitchCase="'COMPLETED'" class="status status-completed">Complétée</span>
+                    <span *ngSwitchDefault>{{rc.status}}</span>
                   </td>
                   <td>{{ rc.questions?.length ?? 0 }}</td>
                 <td>
@@ -50,7 +50,7 @@
                     &nbsp;
                     <p-button icon="pi pi-user" class="mr-2" [rounded]="true" [outlined]="true" (click)="repondEnquete(rc)" />
                     &nbsp;
-                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteEnquete(rc)" />
+                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" [disabled]="rc.status != 'DRAFT'" (click)="deleteEnquete(rc)" />
                 </td>
             </tr>
         </ng-template>
