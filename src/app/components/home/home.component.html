@@ -24,20 +24,18 @@
         <ng-template pTemplate="header">
           <tr>
             <th>Nom</th>
+            <th>Description</th>
             <th>Date</th>
             <th>Statut</th>
-            <th>Réponses</th>
             <th>Actions</th>
           </tr>
         </ng-template>
         <ng-template let-survey pTemplate="body">
           <tr>
             <td>{{ survey.name }}</td>
-            <td>cc</td>
-            <td>
-             cc
-            </td>
-            <td>{{ survey.responses }}</td>
+            <td>{{ survey.description }}</td>
+            <td>{{ survey.date | date:'longDate' }}</td>
+            <td>{{ survey.statusLabel }}</td>
             <td><p-button icon="pi pi-ellipsis-h"></p-button></td>
           </tr>
         </ng-template>
