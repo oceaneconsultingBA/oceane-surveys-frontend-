@@ -3,17 +3,17 @@
     <div class="stats-cards">
       <p-card class="stat-card">
         <span>Enquêtes actives</span>
-        <h2 class="stat-value text-primary">8</h2>
+        <h2 class="stat-value text-primary">{{statistics.activeSurveys}}</h2>
       </p-card>
   
       <p-card class="stat-card">
-        <span>Réponses ce mois</span>
-        <h2 class="stat-value text-success">124</h2>
+        <span>Réponses</span>
+        <h2 class="stat-value text-success">{{statistics.answers}}</h2>
       </p-card>
   
       <p-card class="stat-card">
-        <span>Taux de réponse</span>
-        <h2 class="stat-value text-warning">68%</h2>
+        <span>Réponses par question</span>
+        <h2 class="stat-value text-warning">{{statistics.answers / statistics.questions}}</h2>
       </p-card>
     </div>
   

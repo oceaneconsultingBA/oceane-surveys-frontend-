@@ -98,7 +98,7 @@ export class RecipientComponent implements OnInit {
     this.recipientService.getRecipients().subscribe({
       next: (data: any) => {
         console.log('Destinataires récupérées avec succès :', data);
-        this.recepients = data; // Met à jour la liste des destinataire
+        this.recepients = data; // Met à jour la liste des destinataires
       },
       error: (err: any) => {
         console.error('Erreur lors du chargement des destinataires :', err);

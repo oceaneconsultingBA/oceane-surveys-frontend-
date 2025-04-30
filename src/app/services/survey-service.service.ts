@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Survey } from '../models/survey';
 import { environment } from '../../environnements/environnement';
+import { Statistics } from '../models/statistics';
 
 
 @Injectable({ providedIn: 'root' })
@@ -12,6 +13,10 @@ export class SurveyService {
 
   getSurveys(): Observable<Survey[]> {
     return this.http.get<Survey[]>(this.apiUrl);
+  }
+
+  getStatistics(): Observable<Statistics> {
+    return this.http.get<Statistics>(`${this.apiUrl}/statistics`);
   }
 
   getSurvey(id: number): Observable<Survey> {

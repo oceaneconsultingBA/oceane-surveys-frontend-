@@ -6,6 +6,7 @@ import { ChartModule } from 'primeng/chart';
 import { SurveyService } from '../../services/survey-service.service';
 import { MessageService } from 'primeng/api';
 import { Survey } from '../../models/survey';
+import { Statistics } from '../../models/statistics';
 
 
 @Component({
@@ -15,9 +16,6 @@ import { Survey } from '../../models/survey';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-
-  surveyService = Inject(SurveyService);
-   private messageService = Inject(MessageService);
   surveys = [
     { name: "Satisfaction consultant - ABC Corp", date: new Date(2025, 2, 14), status: "active", statusLabel: "Active", responses: "18/24" },
     { name: "Évaluation mission XYZ Tech", date: new Date(2025, 2, 1), status: "paused", statusLabel: "En pause", responses: "12/15" },
@@ -25,6 +23,14 @@ export class HomeComponent implements OnInit {
   ];
 
   chartData: any;
+
+  statistics = null as unknown as Statistics;
+
+  constructor(
+    private messageService: MessageService,
+    private surveyService: SurveyService
+  ) {
+  }
 
   ngOnInit() {
     this.chartData = {
@@ -34,9 +40,16 @@ export class HomeComponent implements OnInit {
       ]
     };
 
-    this.surveyService.getSurveys().subscribe(
-      //cc
-    );
+    this.surveyService.getStatistics().subscribe({
+      next: (data: any) => {
+        console.log('Statistiques récupérées avec succès :', data);
+        this.statistics = data; // Met à jour la liste des statistiques
+      },
+      error: (err: any) => {
+        console.error('Erreur lors du chargement des statistiques :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des statistiques' });
+      }
+    });
 
   }
 }
