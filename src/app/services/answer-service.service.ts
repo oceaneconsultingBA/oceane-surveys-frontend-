@@ -12,4 +12,8 @@ export class AnswerService {
   saveAnswers(surveyId: number, answers: {}): Observable<{}> {
     return this.http.post<{}>(`${this.apiUrl}/${surveyId}`, answers);
   }
+  
+  getAnswersByDate(periodicity: 'day' | 'month' | 'year'): Observable<{}> {
+      return this.http.get<{}>(`${this.apiUrl}/periodicity/${periodicity}`);
+    }
 }

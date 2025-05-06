@@ -35,25 +35,58 @@
             <td>{{ survey.name }}</td>
             <td>{{ survey.description }}</td>
             <td>{{ survey.date | date:'longDate' }}</td>
-            <td>{{ survey.statusLabel }}</td>
+            <td [ngSwitch]="survey.status">
+                <span *ngSwitchCase="'DRAFT'" class="status status-draft" >En pause</span>
+                <span *ngSwitchCase="'ACTIVE'" class="status status-active">Active</span>
+                <span *ngSwitchCase="'COMPLETED'" class="status status-completed">Complétée</span>
+                <span *ngSwitchDefault>{{survey.status}}</span>
+            </td>
             <td><p-button icon="pi pi-ellipsis-h"></p-button></td>
           </tr>
         </ng-template>
       </p-table>
     </p-card>
-  
+
     <!-- Graphiques -->
     <div class="charts-container">
-      <p-card>
+      <p-card *ngIf="selectedGraph?.key == 'bar'">
         <h4>Taux de participation</h4>
         <p-chart type="bar" [data]="chartData"></p-chart>
       </p-card>
   
-      <p-card>
+      <p-card *ngIf="selectedGraph?.key == 'pie'">
+        <h4>Taux de participation</h4>
+        <p-chart type="pie" [data]="chartData"></p-chart>
+      </p-card>
+
+      <div class="flex flex-wrap gap-4">
+        <div *ngFor="let category of graphes" class="flex items-center field-checkbox">
+            <p-radiobutton [inputId]="category.key" name="category" [value]="category" [(ngModel)]="selectedGraph"/>
+            &nbsp;
+            <label [for]="category.key" class="ml-2">{{ category.name }}</label>
+            <br/>
+        </div>
+        <br/>
+    </div>
+    <br/>
+
+    <div class="flex flex-wrap gap-4">
+      <div *ngFor="let periodicity of periodicities" class="flex items-center field-checkbox">
+          <p-radiobutton [inputId]="periodicity.key" name="category" [value]="periodicity" [(ngModel)]="selectedPeriodicity" (onClick)="updateAnswerStats()"/>
+          &nbsp;
+          <label [for]="periodicity.key" class="ml-2">{{ periodicity.name }}</label>
+          <br/>
+      </div>
+      <br/>
+  </div>
+  
+      <!-- <p-card>
         <h4>Temps de réponse moyen</h4>
         <h2 class="text-primary">1.8</h2>
         <span>jours</span>
-      </p-card>
+      </p-card> -->
     </div>
   </div>
-  
+  <br/>
+  <br/>
+  <br/>

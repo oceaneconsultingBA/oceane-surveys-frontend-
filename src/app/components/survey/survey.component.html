@@ -43,8 +43,8 @@
                     <span *ngSwitchCase="'ACTIVE'" class="status status-active">Active</span>
                     <span *ngSwitchCase="'COMPLETED'" class="status status-completed">Complétée</span>
                     <span *ngSwitchDefault>{{rc.status}}</span>
-                  </td>
-                  <td>{{ rc.questions?.length ?? 0 }}</td>
+                </td>
+                <td>{{ rc.questions?.length ?? 0 }}</td>
                 <td>
                     <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editeEnquete(rc)" />
                     &nbsp;
