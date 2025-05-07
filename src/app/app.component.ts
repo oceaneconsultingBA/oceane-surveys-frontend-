@@ -33,6 +33,16 @@ export class AppComponent {
     this.checkScreenSize();
   }
 
+  toggleAdmin() {
+    let role = sessionStorage.getItem('role');
+
+    sessionStorage.setItem('role', role === 'admin' ? 'user' : 'admin');
+  }
+
+  isAdmin(): boolean {
+    return sessionStorage.getItem('role') === 'admin';
+  }
+
 
   checkScreenSize() {
     if (typeof window !== 'undefined') { // Vérifie si `window` existe

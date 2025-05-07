@@ -1,33 +1,38 @@
 <mat-toolbar color="primary" class="header">
-  <button mat-icon-button (click)="sidenav.toggle()" class="menu-button">
-    <mat-icon>menu</mat-icon>
-  </button>
-   <!-- Logo et nom de l'application -->
-   <div class="logo-container">
-    <img src="/assets/images/logo.png" alt="Logo Oceane Consulting" style="width: 100px;height: 50px;">
-    <span>Oceane consulting | plateforme d'enquêtes</span>
-  </div>
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="sidenav.toggle()" class="menu-button">
+      <mat-icon>menu</mat-icon>
+    </button>
+     <!-- Logo et nom de l'application -->
+    <div class="logo-container flexExpand">
+      <img src="/assets/images/logo.png" alt="Logo Oceane Consulting" style="width: 100px;height: 50px;">
+      <span>Oceane consulting | plateforme d'enquêtes</span>
+    </div>
+    <button mat-icon-button (click)="toggleAdmin()" class="menu-button">
+      <mat-icon>{{isAdmin() ? 'person_add' : 'person'}}</mat-icon>
+    </button>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side" [opened]="!isMobile">
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard">
+      <mat-list-item *ngIf="isAdmin()" routerLink="/dashboard">
         <mat-icon style="vertical-align: middle;">dashboard</mat-icon>
         <span class="nav-text" routerLinkActive='active'>Tableau de bord</span>
-      </a>
-      <a mat-list-item routerLink="/surveys-edit">
+      </mat-list-item>
+      <mat-list-item *ngIf="isAdmin()" routerLink="/surveys-edit">
         <mat-icon style="vertical-align: middle;">assignment_ind</mat-icon>
         <span class="nav-text" routerLinkActive='active'>Créer enquête</span>
-      </a>
-      <a mat-list-item routerLink="/surveys">
+      </mat-list-item>
+      <mat-list-item routerLink="/surveys">
         <mat-icon style="vertical-align: middle;">assignment</mat-icon>
         <span class="nav-text" routerLinkActive='active'>Mes enquêtes</span>
-      </a>
-      <a mat-list-item routerLink="/recipients">
+      </mat-list-item>
+      <mat-list-item *ngIf="isAdmin()" routerLink="/recipients">
         <mat-icon style="vertical-align: middle;">group</mat-icon>
         <span class="nav-text" routerLinkActive='active'>Destinataires</span>
-      </a>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
 
