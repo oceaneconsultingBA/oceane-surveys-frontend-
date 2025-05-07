@@ -16,6 +16,8 @@ import { filter } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-survey-creation',
   imports: [
@@ -68,7 +70,8 @@ export class SurveyCreationComponent {
     private fb: FormBuilder,
     private surveyService: SurveyService,
     private messageService: MessageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {
     console.log("Chargement des champs de formulaire");
     this.surveyForm = this.fb.group({
@@ -151,7 +154,18 @@ export class SurveyCreationComponent {
   }
   
   publish() {
-    this.persist(SurveyStatus.ACTIVE);
+      const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: "Confirmer la publication d'une enquête",
+          message: "Vous allez publier l'enquête: " + this.surveyForm.controls['surveyName'].value,
+          confirmation: false
+        }
+      });
+      confirmDialog.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.persist(SurveyStatus.ACTIVE);
+        }
+      });
   }
   
   private persist(status: SurveyStatus) {

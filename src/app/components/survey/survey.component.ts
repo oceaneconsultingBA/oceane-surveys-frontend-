@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Survey } from '../../models/survey';
 import { MessageService } from 'primeng/api';
 import { SurveyStatus } from '../../models/survey-status';
-import { Question } from '../../models/question';
 import { SurveyService } from '../../services/survey-service.service';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +14,8 @@ import { SelectModule } from 'primeng/select';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-survey',
@@ -46,7 +47,8 @@ export class SurveyComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private surveyService: SurveyService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
 
   }
@@ -93,16 +95,27 @@ export class SurveyComponent implements OnInit {
 
   // Supprimer une enquete
   deleteEnquete(enquete: Survey) {
-    console.log('Enquête à supprimer : ' + enquete.id);
-    this.surveyService.deleteSurvey(enquete.id).subscribe({
-      next: () => {
-        console.log('Enquête supprimée avec succès :' + enquete.id);
-        this.enquetes = this.enquetes.filter(r => r.id !== enquete.id);
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête supprimée avec succès' });
-      },
-      error: (err: any) => {
-        console.error('Erreur lors de la suppression :', err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression' });
+    const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: "Confirmer la suppression d'une enquête",
+        message: "Êtes-vous sûr de vouloir supprimer l'enquête: " + enquete.title + " ?",
+        confirmation: true
+      }
+    });
+    confirmDialog.afterClosed().subscribe(result => {
+      if (result === true) {
+        console.log('Enquête à supprimer : ' + enquete.id);
+        this.surveyService.deleteSurvey(enquete.id).subscribe({
+          next: () => {
+            console.log('Enquête supprimée avec succès :' + enquete.id);
+            this.enquetes = this.enquetes.filter(r => r.id !== enquete.id);
+            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête supprimée avec succès' });
+          },
+          error: (err: any) => {
+            console.error('Erreur lors de la suppression :', err);
+            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression' });
+          }
+        });
       }
     });
   }
