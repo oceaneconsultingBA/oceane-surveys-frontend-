@@ -5,19 +5,21 @@ import { SurveyCreationComponent } from './components/survey-creation/survey-cre
 import { RecipientComponent } from './components/recipient/recipient.component';
 import { SurveyComponent } from './components/survey/survey.component';
 import { AnswerComponent } from './components/answer/answer.component';
+import { RoleGuard } from './guards/role.guard';
 
 
 export const routes: Routes = [
-  { path: 'dashboard', component: HomeComponent },
-  { path: 'surveys-edit', component: SurveyCreationComponent },
+  { path: 'dashboard', canActivate: [RoleGuard], component: HomeComponent },
+  { path: 'surveys-edit', canActivate: [RoleGuard], component: SurveyCreationComponent },
   { path: 'answer', component: AnswerComponent },
   { path: 'surveys', component: SurveyComponent },
-  { path: 'recipients', component: RecipientComponent },
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'recipients', canActivate: [RoleGuard], component: RecipientComponent },
+  { path: '', redirectTo: '/surveys', pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [RoleGuard]
 })
 export class AppRoutingModule { }

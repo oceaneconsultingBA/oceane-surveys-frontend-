@@ -55,6 +55,10 @@ export class SurveyComponent implements OnInit {
     this.getSurveys();
   }
 
+  isAdmin(): boolean {
+    return sessionStorage.getItem('role') === 'admin';
+  }
+
   private getSurveys() {
     this.surveyService.getSurveys().subscribe({
       next: (data: any) => {

@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" class="header">
   <mat-toolbar-row>
     <button mat-icon-button (click)="sidenav.toggle()" class="menu-button">
-      <mat-icon>menu</mat-icon>
+      <mat-icon style="color: white;">menu</mat-icon>
     </button>
      <!-- Logo et nom de l'application -->
     <div class="logo-container flexExpand">
@@ -9,7 +9,7 @@
       <span>Oceane consulting | plateforme d'enquêtes</span>
     </div>
     <button mat-icon-button (click)="toggleAdmin()" class="menu-button">
-      <mat-icon>{{isAdmin() ? 'person_add' : 'person'}}</mat-icon>
+      <mat-icon style="color: white;">{{isAdmin() ? 'person_add' : 'person'}}</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
