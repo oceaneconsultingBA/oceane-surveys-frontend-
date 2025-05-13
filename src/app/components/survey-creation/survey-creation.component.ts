@@ -154,11 +154,44 @@ export class SurveyCreationComponent {
   }
   
   publish() {
+    let messages = [] as string[];
+
+    if (!this.surveyForm.controls['surveyName'].value) {
+      messages.push("Il manque un titre d'enquête");
+    }
+
+    if (!this.surveyForm.controls['description'].value) {
+      messages.push("Il manque une description d'enquête");
+    }
+
+    if (this.recipientsComponent.getSelectedRecipients().length === 0) {
+      messages.push("Il manque un destinataire à l'enquête");
+    }
+
+    if (this.questionsComponent.getQuestionDTOs().length === 0) {
+      messages.push("Il manque une question à l'enquête");
+    }
+
+    if (messages.length !== 0) {
+      const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: "Données manquantes",
+          message: '<ul><li>' + messages.join('</li><li>') + '</li></ul>',
+          confirmation: false
+        }
+      });
+      confirmDialog.afterClosed().subscribe();
+    } else {
+      this.doPublish();
+    }
+  }
+  
+  doPublish() {
       const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
         data: {
           title: "Confirmer la publication d'une enquête",
-          message: "Vous allez publier l'enquête: " + this.surveyForm.controls['surveyName'].value,
-          confirmation: false
+          message: "Êtes-vous sûr de vouloir publier l'enquête : " + this.surveyForm.controls['surveyName'].value + " ?",
+          confirmation: true
         }
       });
       confirmDialog.afterClosed().subscribe(result => {

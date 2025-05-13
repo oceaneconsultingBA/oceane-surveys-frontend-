@@ -112,4 +112,8 @@ $border-radius: 8px;
     display: block;
   }
   
+  .required:after {
+    content:" *";
+    color: red;
+  }
 }

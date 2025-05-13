@@ -7,13 +7,13 @@
     <h3>Étape 1 : Informations générales</h3>
     <form [formGroup]="surveyForm">
         <div class="form-group">
-            <label for="surveyName">Nom de l'enquête</label>
+            <label for="surveyName" class="required">Nom de l'enquête</label>
             <input pInputText id="surveyName" formControlName="surveyName" placeholder="Entrez le titre de l'enquête" />
           </div>
     
           <!-- Description -->
           <div class="form-group">
-            <label for="description">Description</label>
+            <label for="description" class="required">Description</label>
             <textarea id="description" pInputTextarea formControlName="description" placeholder="Entrez une description ici..." rows="4"></textarea>
           </div>
     
@@ -32,12 +32,12 @@
 </div>
 
 <div [style.display]="activeStep === 1 ? 'block' : 'none'">
-    <h3>Étape 2 : Ajouter des questions</h3>
+    <h3 class="required">Étape 2 : Ajouter des questions</h3>
     <app-questions #questions [editable]="true"></app-questions>
 </div>
 
 <div [style.display]="activeStep === 2 ? 'block' : 'none'">
-    <h3>Étape 3 : Ajouter des destinataires</h3>
+    <h3 class="required">Étape 3 : Ajouter des destinataires</h3>
     <app-recipient #recipients></app-recipient>    
 </div>
 
