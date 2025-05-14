@@ -20,6 +20,11 @@
       margin-top: 10px;
       font-weight: bold;
   }
+  
+  .required:after {
+    content:" *";
+    color: red;
+  }
 
   .add-option {
       display: flex;

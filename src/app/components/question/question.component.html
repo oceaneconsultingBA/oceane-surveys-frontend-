@@ -2,17 +2,17 @@
     <form [formGroup]="questionForm">
     <h3>Question</h3>
 
-    <label *ngIf="editable" for="questionType">Type de question*</label>
+    <label *ngIf="editable" for="questionType" class="required">Type de question</label>
     <p-dropdown *ngIf="editable" id="questionType" formControlName="questionType" [options]="questionTypes" placeholder="Sélectionner un type"></p-dropdown>
 
-    <label *ngIf="editable" for="questionText">Texte de la question*</label>
+    <label *ngIf="editable" for="questionText" class="required">Texte de la question</label>
     <textarea style="width: 100%;" *ngIf="editable" id="questionText" pInputTextarea formControlName="questionText" placeholder="Entrez une question ici..." rows="2"></textarea>
     <span *ngIf="!editable">{{questionForm.controls['questionText'].value}}</span>
     <br/>
     <br/>
 
     <div *ngIf="['choix-unique', 'choix-multiple'].includes(questionForm.controls['questionType'].value)">
-        <label>Options de réponse*</label>
+        <label class="required">Options de réponse</label>
         <div *ngIf="editable" class="add-option">
             <textarea id="newOption" pInputTextarea formControlName="newOption" placeholder="Ajouter une option..." rows="2"></textarea>
             <p-button label="Ajouter" icon="pi pi-plus" (click)="addOption()"></p-button>

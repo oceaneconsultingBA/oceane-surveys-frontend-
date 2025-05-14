@@ -189,8 +189,8 @@ export class SurveyCreationComponent {
   doPublish() {
       const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
         data: {
-          title: "Confirmer la publication d'une enquête",
-          message: "Êtes-vous sûr de vouloir publier l'enquête : " + this.surveyForm.controls['surveyName'].value + " ?",
+          title: "Confirmer la publication de l'enquête",
+          message: "Êtes-vous sûr de vouloir publier cette enquête ?",
           confirmation: true
         }
       });
