@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
   surveys = null as unknown as { name: string; description: string | undefined; date: Date; status: SurveyStatus; }[];
 
   chartData: any;
+  chartDelayData: any;
 
   statistics = null as unknown as Statistics;
   graphes = [{key: 'bar', name: 'Histogramme'}, {key: 'pie', name: 'Camembert'}];
@@ -92,7 +93,11 @@ export class HomeComponent implements OnInit {
         this.chartData = {
           labels: dateData,
           datasets: [
-            { label: 'Taux de participation', data: countData }
+            {
+              label: 'Taux de participation',
+              data: countData,
+          backgroundColor: this.getRandomColors(dateData.length)
+        }
           ]
         };
       },
@@ -101,6 +106,44 @@ export class HomeComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des statistiques' });
       }
     });
+
+    this.answerService.getAnswersByDelay(this.selectedPeriodicity?.key as 'day' | 'month' | 'year').subscribe({
+      next: (data: {}) => {
+        console.log('Statistiques récupérées avec succès :', data);
+        let dateData = [] as string[];
+        let countData = [] as number[];
+
+        for (const key in data) {
+          dateData.push(key as unknown as string);
+          countData.push(data[key as keyof typeof data] as number);
+        }
+
+        this.chartDelayData = {
+          labels: dateData,
+          datasets: [
+            {
+              label: 'Nombre de réponses',
+              data: countData,
+          backgroundColor: this.getRandomColors(dateData.length)
+        }
+          ]
+        };
+      },
+      error: (err: any) => {
+        console.error('Erreur lors du chargement des statistiques :', err);
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des statistiques' });
+      }
+    });
+  }
+
+  getRandomColors(num: number): string[] {
+    const colors = [];
+    for (let i = 0; i < num; i++) {
+      colors.push(
+        `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
+      );
+    }
+    return colors;
   }
 }
 

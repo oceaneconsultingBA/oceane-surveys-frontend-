@@ -49,14 +49,16 @@
 
     <!-- Graphiques -->
     <div class="charts-container">
-      <p-card *ngIf="selectedGraph?.key == 'bar'">
+      <p-card>
         <h4>Taux de participation</h4>
-        <p-chart type="bar" [data]="chartData"></p-chart>
+        <p-chart *ngIf="selectedGraph?.key == 'bar'" type="bar" [data]="chartData"></p-chart>
+        <p-chart *ngIf="selectedGraph?.key == 'pie'" type="pie" [data]="chartData"></p-chart>
       </p-card>
-  
-      <p-card *ngIf="selectedGraph?.key == 'pie'">
-        <h4>Taux de participation</h4>
-        <p-chart type="pie" [data]="chartData"></p-chart>
+
+      <p-card>
+        <h4>Temps de réponses en jours/mois/années</h4>
+        <p-chart *ngIf="selectedGraph?.key == 'bar'" type="bar" [data]="chartDelayData"></p-chart>
+        <p-chart *ngIf="selectedGraph?.key == 'pie'" type="pie" [data]="chartDelayData"></p-chart>
       </p-card>
 
       <div class="flex flex-wrap gap-4">

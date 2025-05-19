@@ -16,4 +16,8 @@ export class AnswerService {
   getAnswersByDate(periodicity: 'day' | 'month' | 'year'): Observable<{}> {
       return this.http.get<{}>(`${this.apiUrl}/periodicity/${periodicity}`);
     }
+  
+  getAnswersByDelay(periodicity: 'day' | 'month' | 'year'): Observable<{}> {
+      return this.http.get<{}>(`${this.apiUrl}/delay/${periodicity}`);
+    }
 }
