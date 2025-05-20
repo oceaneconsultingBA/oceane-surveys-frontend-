@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { afterNextRender, Component, OnInit, ViewChild } from '@angular/core';
 import { Survey } from '../../models/survey';
 import { MessageService } from 'primeng/api';
 import { SurveyStatus } from '../../models/survey-status';
@@ -41,6 +41,7 @@ export class SurveyComponent implements OnInit {
   statuses!: any[];
   modalMode!: String;
   SurveyStatus = SurveyStatus;
+    admin = false;
   
   @ViewChild('dt') dt!: Table;
 
@@ -50,7 +51,13 @@ export class SurveyComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog
   ) {
-
+    afterNextRender(() => {
+        try {
+        this.admin = sessionStorage.getItem('role') === 'admin';
+        }
+        catch (err) {
+        }
+    });
   }
 
   ngOnInit(): void {
@@ -58,7 +65,12 @@ export class SurveyComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    return sessionStorage.getItem('role') === 'admin';
+      try {
+      this.admin = sessionStorage.getItem('role') === 'admin';
+      }
+      catch (err) {
+      }
+    return this.admin;
   }
 
   private getSurveys() {

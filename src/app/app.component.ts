@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { afterNextRender, Component, HostListener, ViewChild } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';  // Importer ici
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,11 +23,22 @@ import { TableModule } from 'primeng/table';
 export class AppComponent {
   @ViewChild('sidenav') sidenav: MatSidenav | undefined;
   isMobile = false;
+  admin = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.checkScreenSize();
   }
+
+  constructor() {
+  afterNextRender(() => {
+      try {
+      this.admin = sessionStorage.getItem('role') === 'admin';
+      }
+      catch (err) {
+      }
+  });
+}
 
   ngOnInit() {
     this.checkScreenSize();
@@ -40,7 +51,12 @@ export class AppComponent {
   }
 
   isAdmin(): boolean {
-    return sessionStorage.getItem('role') === 'admin';
+      try {
+      this.admin = sessionStorage.getItem('role') === 'admin';
+      }
+      catch (err) {
+      }
+    return this.admin;
   }
 
 
