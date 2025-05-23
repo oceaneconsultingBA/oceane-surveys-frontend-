@@ -52,11 +52,7 @@ export class SurveyComponent implements OnInit {
     private dialog: MatDialog
   ) {
     afterNextRender(() => {
-        try {
-        this.admin = sessionStorage.getItem('role') === 'admin';
-        }
-        catch (err) {
-        }
+        this.isAdmin();
     });
   }
 
@@ -65,11 +61,10 @@ export class SurveyComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-      try {
+    try {
       this.admin = sessionStorage.getItem('role') === 'admin';
-      }
-      catch (err) {
-      }
+    } catch (err) {
+    }
     return this.admin;
   }
 

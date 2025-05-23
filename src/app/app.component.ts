@@ -32,11 +32,7 @@ export class AppComponent {
 
   constructor() {
   afterNextRender(() => {
-      try {
-      this.admin = sessionStorage.getItem('role') === 'admin';
-      }
-      catch (err) {
-      }
+        this.isAdmin();
   });
 }
 

@@ -10,6 +10,10 @@ export class RoleGuard implements CanActivate {
       next: ActivatedRouteSnapshot,
       state: RouterStateSnapshot
     ): MaybeAsync<GuardResult> {
-        return sessionStorage.getItem('role') === 'admin'
+      try {
+        return sessionStorage.getItem('role') === 'admin';
+      } catch (err) {
+        return false;
+      }
     }
   }
