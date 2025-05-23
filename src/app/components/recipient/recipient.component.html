@@ -68,11 +68,11 @@
     <ng-template #content>
         <form [formGroup]="recipientForm" (ngSubmit)="onSubmit()"> 
             <div>
-                <label for="firstName" class="block font-bold mb-3">Nom</label>
+                <label for="firstName" class="block font-bold mb-3">Prénom</label>
                 <input type="text" pInputText id="firstName"  formControlName="firstName" required autofocus fluid />
             </div><br/>
             <div>
-                <label for="lastName" class="block font-bold mb-3">Prénom</label>
+                <label for="lastName" class="block font-bold mb-3">Nom</label>
                 <input type="text" pInputText id="lastName"  formControlName="lastName" required autofocus fluid />
             </div><br/>
             <div>
