@@ -56,6 +56,7 @@
                 <td>{{ rc.type }}</td>
                 <td>
                     <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editRecepient(rc)" />
+                    &nbsp;
                     <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteRecepient(rc)" />
                 </td>
             </tr>
@@ -87,7 +88,7 @@
                 <label for="type" class="block font-bold mb-3">Type</label>
                 <p-dropdown id="type" [options]="recipientTypes" formControlName="type" placeholder="Sélectionner un type" required autofocus fluid></p-dropdown>
             </div><br/>
-            <button pButton type="submit"  [label]="modalMode === 'CREATE' ? 'Créer' : 'Éditer'" class="p-button-success" style="margin-top: 75px;"></button>
+            <button pButton type="submit"  [label]="modalMode === 'CREATE' ? 'Créer' : 'Modifier'" class="p-button-success" style="margin-top: 75px;"></button>
         </form>        
     </ng-template>
 </p-dialog>
