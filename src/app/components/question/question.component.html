@@ -38,7 +38,7 @@
         <textarea style="width: 100%;" id="textResponse" pInputTextarea formControlName="textResponse" placeholder="Écrivez votre réponse ici..." rows="2"></textarea>
     </div>
 
-    <div *ngIf="questionType === 'rating'" class="rating">
+    <div *ngIf="questionForm.controls['questionType'].value === 'rating'" class="rating">
         <label>Note :</label>
         <p-rating formControlName="rating"></p-rating>
     </div>
