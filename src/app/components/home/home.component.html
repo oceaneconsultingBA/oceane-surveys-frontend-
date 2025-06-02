@@ -20,7 +20,11 @@
     <!-- Table des enquêtes récentes -->
     <p-card class="recent-surveys">
       <h3>Enquêtes récentes</h3>
-      <p-table [value]="surveys" class="p-datatable-striped">
+      <p-table
+      [value]="surveys"
+      sortField="date"
+      [sortOrder]="-1"
+      class="p-datatable-striped">
         <ng-template pTemplate="header">
           <tr>
             <th>Nom</th>
