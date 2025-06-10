@@ -33,4 +33,10 @@ export class RecipientService {
   addRecipientToSurvey(recipientId: number, surveyId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${recipientId}/surveys/${surveyId}`);
   }
+
+  getRecipientsByIds(ids: number[]): Observable<Recipient[]> {
+  const params = ids.map(id => `ids=${id}`).join('&');
+  return this.http.get<Recipient[]>(`${this.apiUrl}/by-ids?${params}`);
+}
+
 }

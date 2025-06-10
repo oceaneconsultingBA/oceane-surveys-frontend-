@@ -72,8 +72,8 @@
     <app-questions #questionSummary [editable]="false"></app-questions>
 
     <h4>Destinataires</h4>
-    <ul *ngIf="recipientsComponent?.getSelectedRecipients()">
-        <li *ngFor="let selectedRecipient of recipientsComponent.getSelectedRecipients()">
+    <ul *ngIf="selectedRecipients && selectedRecipients.length > 0">
+        <li *ngFor="let selectedRecipient of selectedRecipients">
             <span>{{ selectedRecipient.firstName }} {{ selectedRecipient.lastName }} {{ selectedRecipient.email }}</span>
         </li>
     </ul>

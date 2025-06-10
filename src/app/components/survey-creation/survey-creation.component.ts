@@ -18,6 +18,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { RecipientService } from '../../services/recipient-service.service';
 @Component({
   selector: 'app-survey-creation',
   imports: [
@@ -35,7 +36,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './survey-creation.component.html',
   styleUrl: './survey-creation.component.scss'
 })
-export class SurveyCreationComponent {
+export class SurveyCreationComponent  {
   @ViewChild('questions') questionsComponent!: QuestionsComponent;
   @ViewChild('recipients') recipientsComponent!: RecipientComponent;
   @ViewChild('questionSummary') questionSummary!: QuestionsComponent;
@@ -65,10 +66,12 @@ export class SurveyCreationComponent {
     { label: 'Destinataires' },
     { label: 'Validation' }
   ];
+    selectedRecipients: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private surveyService: SurveyService,
+    private recipientService: RecipientService,
     private messageService: MessageService,
     private route: ActivatedRoute,
     private dialog: MatDialog
@@ -130,7 +133,9 @@ export class SurveyCreationComponent {
 
     if (this.previousRecipients !== null) {
       console.log('Chargement des ' + this.previousRecipients.length + ' destinataire(s) déjà créée(s)');
-      this.recipientsComponent.setSelectedRecipients(this.previousRecipients);
+      this.recipientService.getRecipientsByIds(this.previousRecipients).subscribe(recipients => {
+        this.selectedRecipients = recipients;});
+
       this.previousRecipients = null as unknown as number[];
     }
     

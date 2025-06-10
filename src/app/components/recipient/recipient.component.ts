@@ -111,7 +111,7 @@ export class RecipientComponent implements OnInit {
     return this.selectedRecipients;
   }
 
-  setSelectedRecipients(previousRecipients: number[]) {
+  setSelectedRecipients(previousRecipients: any[]) {
     this.selectedRecipients = this.recepients.filter(q => previousRecipients.includes(q.id));
   }
 
