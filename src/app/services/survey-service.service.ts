@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Survey } from '../models/survey';
 import { environment } from '../../environnements/environnement';
 import { Statistics } from '../models/statistics';
+import { Token } from '../models/token';
 
 
 @Injectable({ providedIn: 'root' })
@@ -21,6 +22,10 @@ export class SurveyService {
 
   getSurvey(id: number): Observable<Survey> {
     return this.http.get<Survey>(`${this.apiUrl}/${id}`);
+  }
+
+  getToken(tokenValue: string): Observable<Token> {
+    return this.http.get<Token>(`${this.apiUrl}/token/${tokenValue}`);
   }
 
   createSurvey(survey: Survey): Observable<Survey> {

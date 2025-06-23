@@ -39,8 +39,8 @@ export class QuestionsComponent {
     return this.questionComponents?.toArray().map(e => e.getQuestionDTO());
   }
   
-  getAnswerDTOs(): Answer[] {
-    return this.questionComponents?.toArray().map(e => e.getAnswerDTO());
+  getAnswerDTOs(recipientId: number): Answer[] {
+    return this.questionComponents?.toArray().map(e => e.getAnswerDTO(recipientId));
   }
   
   setQuestionDTOs(input: Question[]) {

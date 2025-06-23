@@ -7,9 +7,7 @@ import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { QuestionsComponent } from "../questions/questions.component"; 
 import { SurveyService } from '../../services/survey-service.service';
-import { SurveyStatus } from '../../models/survey-status';
 import { Question } from '../../models/question';
-import { Survey } from '../../models/survey';
 import { ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
@@ -42,6 +40,8 @@ export class AnswerComponent {
   previousRecipients: number[] = [];
   questionDTOs = null as unknown as Question[];
   surveyId = null as unknown as number;
+  recipientId = null as unknown as number;
+  token = null as unknown as string;
 
   creationDate = null as unknown as Date;
   description: string = '';
@@ -84,6 +84,8 @@ export class AnswerComponent {
     .subscribe(params => {
       // Read the query parameters
       this.surveyId = params['survey-id'];
+      this.recipientId = params['recipient-id'];
+      this.token = params['token'];
       console.log('this.surveyId : ' + this.surveyId);
 
       if (this.surveyId) {
@@ -138,7 +140,7 @@ export class AnswerComponent {
   
   publish() {
     let questions = this.questionList.getQuestionDTOs();
-    let answers = this.questionList.getAnswerDTOs();
+    let answers = this.questionList.getAnswerDTOs(this.recipientId);
     console.log(questions.length + " question(s) et " + answers.length + " réponse(s)");
 
     let answersByQuestionId = new Map<number, Answer>();
@@ -154,7 +156,7 @@ export class AnswerComponent {
 
     console.log(answersByQuestionId.size + " réponse(s) remplie(s) : " + JSON.stringify(Object.fromEntries(answersByQuestionId)));
   
-    this.answerService.saveAnswers(this.surveyId, Object.fromEntries(answersByQuestionId)).subscribe(
+    this.answerService.saveAnswers(this.surveyId, this.token, Object.fromEntries(answersByQuestionId)).subscribe(
       {next: () => {
       this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête remplie avec succès' });
     },

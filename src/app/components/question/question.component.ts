@@ -102,7 +102,7 @@ export class QuestionComponent implements OnInit {
     } as Question;
   }
 
-  getAnswerDTO(): Answer {
+  getAnswerDTO(recipientId: number): Answer {
     let questionTypeEnum: QuestionType;
     switch (this.questionForm.controls['questionType'].value) {
       case 'choix-unique': {
@@ -135,7 +135,7 @@ export class QuestionComponent implements OnInit {
     return {
       id: undefined as unknown as number,
       creationDate: new Date(),
-      recipientId: 1/* TODO Add recipient */ as unknown as number,
+      recipientId: recipientId,
       question: this.getQuestionDTO(),
       text: this.questionForm.controls['textResponse'].value,
       rating: +this.questionForm.controls['rating'].value,

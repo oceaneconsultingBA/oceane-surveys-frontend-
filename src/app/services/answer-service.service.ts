@@ -9,8 +9,8 @@ export class AnswerService {
   private apiUrl: string = `${environment.apiBaseUrl}/answers`;
   constructor(private http: HttpClient) {}
 
-  saveAnswers(surveyId: number, answers: {}): Observable<{}> {
-    return this.http.post<{}>(`${this.apiUrl}/${surveyId}`, answers);
+  saveAnswers(surveyId: number, token: string, answers: {}): Observable<{}> {
+    return this.http.post<{}>(`${this.apiUrl}/${surveyId}/${token}`, answers);
   }
   
   getAnswersByDate(periodicity: 'day' | 'month' | 'year'): Observable<{}> {
