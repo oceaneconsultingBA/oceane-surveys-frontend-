@@ -2,7 +2,7 @@
     <p-toast></p-toast>
     <p-toolbar styleClass="mb-6">
         <ng-template #start>
-            <p-button label="Nouveau" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+            <p-button label="Nouveau destinataire" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
         </ng-template>
         <ng-template #end>
             <p-fileUpload mode="basic" accept=".xls, .xlsx" (onSelect)="onFileSelect($event)" customUpload="true" 

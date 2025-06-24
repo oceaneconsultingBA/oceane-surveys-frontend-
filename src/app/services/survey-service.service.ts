@@ -24,6 +24,10 @@ export class SurveyService {
     return this.http.get<Survey>(`${this.apiUrl}/${id}`);
   }
 
+  getSurveyAnswerState(id: number): Observable<{}> {
+    return this.http.get<{}>(`${this.apiUrl}/${id}/answers`);
+  }
+
   getToken(tokenValue: string): Observable<Token> {
     return this.http.get<Token>(`${this.apiUrl}/token/${tokenValue}`);
   }

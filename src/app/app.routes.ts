@@ -7,9 +7,11 @@ import { SurveyComponent } from './components/survey/survey.component';
 import { AnswerComponent } from './components/answer/answer.component';
 import { RoleGuard } from './guards/role.guard';
 import { SurveyTokenComponent } from './components/survey-token/survey-token.component';
+import { SurveyDashboardComponent } from './components/survey-dashboard/survey-dashboard.component';
 
 
 export const routes: Routes = [
+  { path: 'dashboard/:surveyId', canActivate: [RoleGuard], component: SurveyDashboardComponent },
   { path: 'dashboard', canActivate: [RoleGuard], component: HomeComponent },
   { path: 'surveys-edit', canActivate: [RoleGuard], component: SurveyCreationComponent },
   { path: 'survey/:token', canActivate: [RoleGuard], component: SurveyTokenComponent },

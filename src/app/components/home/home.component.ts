@@ -12,6 +12,8 @@ import { SurveyStatus } from '../../models/survey-status';
 import { CommonModule } from '@angular/common';
 import { AnswerService } from '../../services/answer-service.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     CardModule,
+    TooltipModule,
      TableModule,
       ButtonModule,
        ChartModule,
@@ -29,7 +32,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  surveys = null as unknown as { name: string; description: string | undefined; date: Date; status: SurveyStatus; }[];
+  surveys = null as unknown as { id: number; name: string; description: string | undefined; date: Date; status: SurveyStatus; }[];
 
   chartData: any;
   chartDelayData: any;
@@ -43,6 +46,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private surveyService: SurveyService,
+        private router: Router,
     private answerService: AnswerService
   ) {
   }
@@ -65,6 +69,7 @@ export class HomeComponent implements OnInit {
       next: (data: Survey[]) => {
         console.log('Statistiques récupérées avec succès :', data);
         this.surveys = data.map(e => ({
+          id: e.id,
           name: e.title,
           description: e.description,
           date: e.creationDate,
@@ -144,6 +149,10 @@ export class HomeComponent implements OnInit {
       );
     }
     return colors;
+  }
+  
+  access(surveyId: number) {
+    this.router.navigate(['dashboard', surveyId]);
   }
 }
 
