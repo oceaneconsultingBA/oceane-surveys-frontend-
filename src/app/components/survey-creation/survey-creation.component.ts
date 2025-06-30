@@ -195,7 +195,7 @@ export class SurveyCreationComponent  {
       const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
         data: {
           title: "Confirmer la publication de l'enquête",
-          message: "Êtes-vous sûr de vouloir publier cette enquête ?",
+          message: "Êtes-vous sûr de vouloir envoyer cette enquête par mail ?",
           confirmation: true
         }
       });
