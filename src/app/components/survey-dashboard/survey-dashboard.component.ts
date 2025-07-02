@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RecipientService } from '../../services/recipient-service.service';
 import { Recipient } from '../../models/recipient';
 import { TooltipModule } from 'primeng/tooltip';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -44,34 +45,41 @@ export class SurveyDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.surveyId = Number(this.route.snapshot.params['surveyId']);
-    this.surveyService.getSurvey(this.surveyId).subscribe(response => {
-      console.log('Chargement de ' + response.title);
-      this.surveyName = response.title;
-    });
+    this.route.queryParams.pipe(
+      filter(params => params['surveyId'])
+    )
+    .subscribe(params => {
+      // Read the query parameters
+      this.surveyId = params['surveyId'];
+  
+      this.surveyService.getSurvey(this.surveyId).subscribe(response => {
+        console.log('Chargement de ' + response.title);
+        this.surveyName = response.title;
+      });
 
-    this.surveyService.getSurveyAnswerState(this.surveyId).subscribe({
-      next: (data: {}) => {
-        console.log('Données récupérées avec succès :', data);
-        this.recipients = [];
-        let result = Object.entries(data);
-        let recipientsToDisplay = [] as { name: string; mail: string | undefined; date: Date; status: string; }[];
-        this.addRecipient(result, recipientsToDisplay, 0);
-      },
-      error: (err: any) => {
-        console.error('Erreur lors du chargement des données :', err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des données' });
-      }
-    });
+      this.surveyService.getSurveyAnswerState(this.surveyId).subscribe({
+        next: (data: {}) => {
+          console.log('Données récupérées avec succès :', data);
+          this.recipients = [];
+          let result = Object.entries(data);
+          let recipientsToDisplay = [] as { name: string; mail: string | undefined; date: Date; status: string; }[];
+          this.addRecipient(result, recipientsToDisplay, 0);
+        },
+        error: (err: any) => {
+          console.error('Erreur lors du chargement des données :', err);
+          this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des données' });
+        }
+      });
 
-    this.surveyService.getSurveys().subscribe({
-      next: (data: Survey[]) => {
-        console.log('Statistiques récupérées avec succès :', data);
-      },
-      error: (err: any) => {
-        console.error('Erreur lors du chargement des statistiques :', err);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des statistiques' });
-      }
+      this.surveyService.getSurveys().subscribe({
+        next: (data: Survey[]) => {
+          console.log('Statistiques récupérées avec succès :', data);
+        },
+        error: (err: any) => {
+          console.error('Erreur lors du chargement des statistiques :', err);
+          this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des statistiques' });
+        }
+      });
     });
   }
 

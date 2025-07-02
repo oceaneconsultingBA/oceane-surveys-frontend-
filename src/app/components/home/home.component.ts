@@ -152,7 +152,9 @@ export class HomeComponent implements OnInit {
   }
   
   access(surveyId: number) {
-    this.router.navigate(['dashboard', surveyId]);
+    this.router.navigate(['dashboard', 'survey'], {queryParams: {
+      'surveyId': surveyId
+    }});
   }
 }
 
