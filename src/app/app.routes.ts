@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: 'dashboard/survey', canActivate: [RoleGuard], component: SurveyDashboardComponent },
   { path: 'dashboard', canActivate: [RoleGuard], component: HomeComponent },
   { path: 'surveys-edit', canActivate: [RoleGuard], component: SurveyCreationComponent },
-  { path: 'survey', canActivate: [RoleGuard], component: SurveyTokenComponent },
+  { path: 'survey', component: SurveyTokenComponent },
   { path: 'answer', component: AnswerComponent },
   { path: 'surveys', component: SurveyComponent },
   { path: 'recipients', canActivate: [RoleGuard], component: RecipientComponent },
