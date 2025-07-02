@@ -9,7 +9,6 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyService } from '../../services/survey-service.service';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-survey-creation',
@@ -36,12 +35,7 @@ export class SurveyTokenComponent implements OnInit {
     ) { }
 
  ngOnInit(): void {
-     this.route.queryParams.pipe(
-       filter(params => params['token'])
-     )
-     .subscribe(params => {
-       // Read the query parameters
-       this.token = params['token'];
+   this.token = this.route.snapshot.params['token'];
    
         this.surveyService.getToken(this.token).subscribe(response => {
           this.router.navigate(['answer'], {queryParams: {
@@ -50,6 +44,5 @@ export class SurveyTokenComponent implements OnInit {
             'token': response.token
           }});
         });
-      });
  }
 }
