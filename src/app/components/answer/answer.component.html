@@ -21,11 +21,15 @@
     <app-questions #questionList [editable]="false"></app-questions>
 </div>
 
-<p-toolbar styleClass="mb-6">
+<p-toolbar styleClass="mb-6" *ngIf="activeStep === 0 || activeStep === 1">
   <ng-template #end>
-    <p-button label="Commencer" icon="pi pi-chevron-right" (click)="nextStep()" *ngIf="activeStep !== steps.length - 1"></p-button>
-    <p-button label="Envoyer" icon="pi" (click)="publish()" *ngIf="activeStep === steps.length - 1"></p-button>
+    <p-button label="Commencer" icon="pi pi-chevron-right" (click)="nextStep()" *ngIf="activeStep === 0"></p-button>
+    <p-button label="Envoyer" icon="pi" (click)="publish()" *ngIf="activeStep === 1"></p-button>
   </ng-template>
 </p-toolbar>
+
+<div *ngIf="activeStep === 2">
+    <h3>Merci d'avoir répondu à l'enquête</h3>
+</div>
 
 </div>

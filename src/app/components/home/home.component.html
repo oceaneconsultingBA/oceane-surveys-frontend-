@@ -45,7 +45,7 @@
                 <span *ngSwitchCase="'COMPLETED'" class="status status-completed">Complétée</span>
                 <span *ngSwitchDefault>{{survey.status}}</span>
             </td>
-            <td><p-button icon="pi pi-chart-line" pTooltip="Voir les destinataires et leurs réponses" (click)="access(survey.id)"></p-button></td>
+            <td><p-button icon="pi pi-chart-line" pTooltip="Voir les destinataires et leurs réponses" tooltipPosition="left" (click)="access(survey.id)"></p-button></td>
           </tr>
         </ng-template>
       </p-table>

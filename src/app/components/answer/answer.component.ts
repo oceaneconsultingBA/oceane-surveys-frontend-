@@ -58,7 +58,8 @@ export class AnswerComponent {
 
   steps = [
     { label: 'Informations' },
-    { label: 'Questions' }
+    { label: 'Questions' },
+    { label: 'Merci' }
   ];
 
   constructor(
@@ -159,6 +160,7 @@ export class AnswerComponent {
     this.answerService.saveAnswers(this.surveyId, this.token, Object.fromEntries(answersByQuestionId)).subscribe(
       {next: () => {
       this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête remplie avec succès' });
+      this.nextStep();
     },
     error: (err: any) => {
       console.error("Échec du remplissage de l'enquête :", err);

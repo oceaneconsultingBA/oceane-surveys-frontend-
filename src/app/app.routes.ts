@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: 'surveys-edit', canActivate: [RoleGuard], component: SurveyCreationComponent },
   { path: 'survey/:token', component: SurveyTokenComponent },
   { path: 'answer', component: AnswerComponent },
-  { path: 'surveys', component: SurveyComponent },
+  { path: 'surveys', canActivate: [RoleGuard], component: SurveyComponent },
   { path: 'recipients', canActivate: [RoleGuard], component: RecipientComponent },
   { path: '*', redirectTo: '/surveys', pathMatch: 'full' },
 ];
