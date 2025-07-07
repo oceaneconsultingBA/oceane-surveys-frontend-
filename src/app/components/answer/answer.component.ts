@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { StepsModule } from 'primeng/steps';
@@ -15,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { AnswerService } from '../../services/answer-service.service';
 import { Answer } from '../../models/answer';
+import * as confetti from 'canvas-confetti';
 
 @Component({
   selector: 'app-answer',
@@ -63,6 +64,8 @@ export class AnswerComponent {
   ];
 
   constructor(
+    private renderer2: Renderer2,
+    private elementRef: ElementRef,
     private fb: FormBuilder,
     private surveyService: SurveyService,
     private answerService: AnswerService,
@@ -101,6 +104,15 @@ export class AnswerComponent {
         });
       }
     });
+  }
+
+  public surprise(): void {
+    const canvas = this.renderer2.createElement('canvas');
+    this.renderer2.appendChild(this.elementRef.nativeElement, canvas);
+    const myConfetti = confetti.create(canvas, {
+      resize: true // will fit all screen sizes
+    }); 
+    myConfetti();
   }
 
   nextStep() {
@@ -161,6 +173,7 @@ export class AnswerComponent {
       {next: () => {
       this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Enquête remplie avec succès' });
       this.nextStep();
+      this.surprise();
     },
     error: (err: any) => {
       console.error("Échec du remplissage de l'enquête :", err);

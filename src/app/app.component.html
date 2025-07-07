@@ -25,7 +25,7 @@
         <mat-icon style="vertical-align: middle;">assignment_ind</mat-icon>
         <span class="nav-text" routerLinkActive='active'>Créer enquête</span>
       </mat-list-item>
-      <mat-list-item routerLink="/surveys">
+      <mat-list-item *ngIf="isAdmin()" routerLink="/surveys">
         <mat-icon style="vertical-align: middle;">assignment</mat-icon>
         <span class="nav-text" routerLinkActive='active'>Mes enquêtes</span>
       </mat-list-item>

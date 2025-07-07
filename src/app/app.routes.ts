@@ -8,6 +8,7 @@ import { AnswerComponent } from './components/answer/answer.component';
 import { RoleGuard } from './guards/role.guard';
 import { SurveyTokenComponent } from './components/survey-token/survey-token.component';
 import { SurveyDashboardComponent } from './components/survey-dashboard/survey-dashboard.component';
+import { IdleComponent } from './components/idle/idle.component';
 
 
 export const routes: Routes = [
@@ -18,7 +19,8 @@ export const routes: Routes = [
   { path: 'answer', component: AnswerComponent },
   { path: 'surveys', canActivate: [RoleGuard], component: SurveyComponent },
   { path: 'recipients', canActivate: [RoleGuard], component: RecipientComponent },
-  { path: '*', redirectTo: '/surveys', pathMatch: 'full' },
+  { path: 'idle', component: IdleComponent },
+  { path: '*', redirectTo: '/idle', pathMatch: 'full' },
 ];
 
 @NgModule({
