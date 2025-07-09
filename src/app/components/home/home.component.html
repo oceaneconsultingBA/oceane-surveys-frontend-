@@ -4,16 +4,19 @@
       <p-card class="stat-card">
         <span>Enquêtes actives</span>
         <h2 class="stat-value text-primary">{{statistics.activeSurveys}}</h2>
+        <mat-progress-spinner mode="indeterminate" *ngIf="!statistics?.activeSurveys"></mat-progress-spinner>
       </p-card>
   
       <p-card class="stat-card">
         <span>Réponses</span>
         <h2 class="stat-value text-success">{{statistics.answers}}</h2>
+        <mat-progress-spinner mode="indeterminate" *ngIf="!statistics?.answers"></mat-progress-spinner>
       </p-card>
   
       <p-card class="stat-card">
         <span>Réponses par question</span>
         <h2 class="stat-value text-warning">{{statistics.answers / statistics.questions}}</h2>
+        <mat-progress-spinner mode="indeterminate" *ngIf="!statistics?.answers || !statistics?.questions"></mat-progress-spinner>
       </p-card>
     </div>
   
