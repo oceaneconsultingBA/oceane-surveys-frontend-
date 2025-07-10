@@ -37,12 +37,12 @@ export class AnswerComponent implements OnInit {
   @ViewChild('questionList') questionList!: QuestionsComponent;
   @Input() answered = false;
   @Input() surveyId = null as unknown as number;
+  @Input() recipientId = null as unknown as number;
   activeStep = 0;
   surveyForm: FormGroup;
   questions: any[] = [];
   previousRecipients: number[] = [];
   questionDTOs = null as unknown as Question[];
-  recipientId = null as unknown as number;
   token = null as unknown as string;
 
   creationDate = null as unknown as Date;
@@ -148,8 +148,17 @@ export class AnswerComponent implements OnInit {
   update() {
     if (this.questionDTOs !== null) {
       console.log('Chargement des ' + this.questionDTOs.length + ' question(s) déjà créée(s)');
-      this.questionList.setQuestionDTOs(this.questionDTOs);
-      this.questionDTOs = null as unknown as Question[];
+      
+      if (this.answered) {
+        this.answerService.getQuestionsBySurveyAndRecipient(this.surveyId, this.recipientId).subscribe(response => {
+          console.log('Chargement des ' + response.length + " response(s) de l'enquête déjà respondue");
+          this.questionList.setQuestionDTOs(this.questionDTOs);
+          this.questionDTOs = null as unknown as Question[];
+        });
+      } else {
+        this.questionList.setQuestionDTOs(this.questionDTOs);
+        this.questionDTOs = null as unknown as Question[];
+      }
     }
   }
 

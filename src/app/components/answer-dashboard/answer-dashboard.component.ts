@@ -29,6 +29,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AnswerDashboardComponent implements OnInit {
   surveyId = null as unknown as number;
+  recipientId = null as unknown as number;
 
   constructor(
     private route: ActivatedRoute
@@ -37,6 +38,7 @@ export class AnswerDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.surveyId = Number(this.route.snapshot.params['surveyId']);
+    this.recipientId = Number(this.route.snapshot.params['recipientId']);
   }
 }
 
