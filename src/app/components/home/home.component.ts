@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private surveyService: SurveyService,
-        private router: Router,
+    private router: Router,
     private answerService: AnswerService
   ) {
   }

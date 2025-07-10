@@ -9,9 +9,11 @@ import { RoleGuard } from './guards/role.guard';
 import { SurveyTokenComponent } from './components/survey-token/survey-token.component';
 import { SurveyDashboardComponent } from './components/survey-dashboard/survey-dashboard.component';
 import { IdleComponent } from './components/idle/idle.component';
+import { AnswerDashboardComponent } from './components/answer-dashboard/answer-dashboard.component';
 
 
 export const routes: Routes = [
+  { path: 'dashboard/:surveyId/recipient/:recipientId', canActivate: [RoleGuard], component: AnswerDashboardComponent },
   { path: 'dashboard/:surveyId', canActivate: [RoleGuard], component: SurveyDashboardComponent },
   { path: 'dashboard', canActivate: [RoleGuard], component: HomeComponent },
   { path: 'surveys-edit', canActivate: [RoleGuard], component: SurveyCreationComponent },

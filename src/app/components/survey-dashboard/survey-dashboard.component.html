@@ -16,17 +16,17 @@
             <th>Actions</th>
           </tr>
         </ng-template>
-        <ng-template let-survey pTemplate="body">
+        <ng-template let-recipient pTemplate="body">
           <tr>
-            <td>{{ survey.name }}</td>
-            <td>{{ survey.mail }}</td>
-            <td [ngSwitch]="survey.status">
+            <td>{{ recipient.name }}</td>
+            <td>{{ recipient.mail }}</td>
+            <td [ngSwitch]="recipient.status">
                 <span *ngSwitchCase="'PENDING'" class="status status-draft" >En attente</span>
                 <span *ngSwitchCase="'COMPLETED'" class="status status-completed">Complétée</span>
-                <span *ngSwitchDefault>{{survey.status}}</span>
+                <span *ngSwitchDefault>{{recipient.status}}</span>
             </td>
-            <td>{{ survey.date | date:'longDate' }}</td>
-            <td><p-button icon="pi pi-list" pTooltip="Consulter les réponses" tooltipPosition="left"></p-button></td>
+            <td>{{ recipient.date | date:'longDate' }}</td>
+            <td><p-button icon="pi pi-list" pTooltip="Consulter les réponses" tooltipPosition="left" (click)="access(recipient.id)"></p-button></td>
           </tr>
         </ng-template>
       </p-table>

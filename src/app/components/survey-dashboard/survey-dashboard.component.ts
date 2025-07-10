@@ -9,7 +9,7 @@ import { MessageService } from 'primeng/api';
 import { Survey } from '../../models/survey';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RecipientService } from '../../services/recipient-service.service';
 import { Recipient } from '../../models/recipient';
 import { TooltipModule } from 'primeng/tooltip';
@@ -33,12 +33,13 @@ import { TooltipModule } from 'primeng/tooltip';
 export class SurveyDashboardComponent implements OnInit {
   surveyId = null as unknown as number;
   surveyName = null as unknown as string;
-  recipients = null as unknown as { name: string; mail: string | undefined; date: Date; status: string; }[];
+  recipients = null as unknown as { id: number; name: string; mail: string | undefined; date: Date; status: string; }[];
 
   constructor(
     private messageService: MessageService,
     private surveyService: SurveyService,
     private recipientService: RecipientService,
+    private router: Router,
     private route: ActivatedRoute
   ) {
   }
@@ -55,7 +56,7 @@ export class SurveyDashboardComponent implements OnInit {
         console.log('Données récupérées avec succès :', data);
         this.recipients = [];
         let result = Object.entries(data);
-        let recipientsToDisplay = [] as { name: string; mail: string | undefined; date: Date; status: string; }[];
+        let recipientsToDisplay = [] as { id: number; name: string; mail: string | undefined; date: Date; status: string; }[];
         this.addRecipient(result, recipientsToDisplay, 0);
       },
       error: (err: any) => {
@@ -77,7 +78,7 @@ export class SurveyDashboardComponent implements OnInit {
 
   private addRecipient(
     result: [string, unknown][],
-    recipientsToDisplay: { name: string; mail: string | undefined; date: Date; status: string; }[],
+    recipientsToDisplay: { id: number; name: string; mail: string | undefined; date: Date; status: string; }[],
   index: number
 ) {
     if (index > result.length - 1) {
@@ -89,6 +90,7 @@ export class SurveyDashboardComponent implements OnInit {
       next: (recipientData: Recipient) => {
         console.log('Données destinataire récupérées avec succès :', recipientData);
         recipientsToDisplay.push({
+          id: recipientData.id as number,
           name: recipientData.firstName + ' ' + recipientData.lastName as string,
           mail: recipientData.email as string,
           date: result[index][1] as Date,
@@ -101,6 +103,10 @@ export class SurveyDashboardComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du chargement des données' });
       }
     });
+  }
+  
+  access(recipientId: number) {
+    this.router.navigate(['dashboard', this.surveyId, 'recipient', recipientId]);
   }
 }
 
