@@ -126,7 +126,9 @@ export class QuestionComponent implements OnInit {
         break;
       }
     }
-    let questionOptions: QuestionOption[] = ((this.questionForm.controls['selectedResponses'].value) as string[]).map(e => ({
+    let selectedResponses = this.questionForm.controls['selectedResponses'].value;
+    selectedResponses = this.questionForm.controls['questionType'].value === 'choix-unique' ? [selectedResponses] : selectedResponses; 
+    let questionOptions: QuestionOption[] = ((selectedResponses) as string[]).map(e => ({
       id: undefined as unknown as number,
       text: e,
       displayOrder: 0,
