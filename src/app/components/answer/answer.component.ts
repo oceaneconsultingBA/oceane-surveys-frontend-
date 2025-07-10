@@ -150,8 +150,10 @@ export class AnswerComponent implements OnInit {
       console.log('Chargement des ' + this.questionDTOs.length + ' question(s) déjà créée(s)');
       
       if (this.answered) {
-        this.answerService.getQuestionsBySurveyAndRecipient(this.surveyId, this.recipientId).subscribe(response => {
-          console.log('Chargement des ' + response.length + " response(s) de l'enquête déjà respondue");
+        this.answerService.getQuestionsBySurveyAndRecipient(this.surveyId, this.recipientId).subscribe(answers => {
+          console.log('Chargement des ' + answers.length + " response(s) de l'enquête déjà respondue");
+          let answerByquestionId = new Map(answers.map(answer => [answer.question.id, answer]));
+          this.questionDTOs.every(question => question.answer = answerByquestionId.get(question.id))
           this.questionList.setQuestionDTOs(this.questionDTOs);
           this.questionDTOs = null as unknown as Question[];
         });

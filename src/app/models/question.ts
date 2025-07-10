@@ -1,3 +1,4 @@
+import { Answer } from "./answer";
 import { QuestionOption } from "./question-option";
 import { QuestionType } from "./question-type";
 import { Survey } from "./survey";
@@ -11,4 +12,5 @@ export interface Question {
     conditionalLogic?: string;
     survey: Survey;
     options: QuestionOption[];
+    answer: Answer | undefined;
 }

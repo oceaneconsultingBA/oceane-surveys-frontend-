@@ -170,6 +170,13 @@ export class QuestionComponent implements OnInit {
     this.questionId = questionObject.id;
     this.questionForm.controls['questionText'].setValue(questionObject.text);
     this.responseOptions = questionObject.options.map(e => e.text);
+
+    if (questionObject.answer) {
+      console.log('Chargement de la response');
+      this.questionForm.controls['textResponse'].setValue(questionObject.answer.text);
+      this.questionForm.controls['rating'].setValue(questionObject.answer.rating);
+      this.questionForm.controls['selectedResponses'].setValue(questionObject.answer.options);
+    }
   }
 
   addOption() {

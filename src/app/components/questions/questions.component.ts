@@ -58,6 +58,7 @@ export class QuestionsComponent {
         conditionalLogic: questionSource.conditionalLogic,
         survey: questionSource.survey,
         options: questionSource.options,
+        answer: questionSource.answer,
       } as Question;
       console.log('Nouveau texte de question : ' + questionTarget.text);
       this.questions.push(questionTarget);
