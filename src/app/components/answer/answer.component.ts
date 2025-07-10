@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { StepsModule } from 'primeng/steps';
@@ -33,14 +33,15 @@ import * as confetti from 'canvas-confetti';
   templateUrl: './answer.component.html',
   styleUrl: './answer.component.scss'
 })
-export class AnswerComponent {
+export class AnswerComponent implements OnInit {
   @ViewChild('questionList') questionList!: QuestionsComponent;
+  @Input() answered = false;
+  @Input() surveyId = null as unknown as number;
   activeStep = 0;
   surveyForm: FormGroup;
   questions: any[] = [];
   previousRecipients: number[] = [];
   questionDTOs = null as unknown as Question[];
-  surveyId = null as unknown as number;
   recipientId = null as unknown as number;
   token = null as unknown as string;
 
@@ -79,30 +80,43 @@ export class AnswerComponent {
       enqueteType: [null, Validators.required],
       frequencies: ['', Validators.required]
     });
-    
-    console.log("Chargement des paramètres de page");
-    // Get the current route and its query parameters
-    this.route.queryParams.pipe(
-      filter(params => params['survey-id'])
-    )
-    .subscribe(params => {
-      // Read the query parameters
-      this.surveyId = params['survey-id'];
-      this.recipientId = params['recipient-id'];
-      this.token = params['token'];
-      console.log('this.surveyId : ' + this.surveyId);
+  }
 
-      if (this.surveyId) {
-        console.log("Chargement de l'enquête déjà créée");
-        this.surveyService.getSurvey(this.surveyId).subscribe(response => {
-          console.log('Chargement des ' + response.questions.length + " question(s) de l'enquête déjà créée");
-          this.surveyForm.controls['surveyName'].setValue(response.title);
-          this.surveyForm.controls['description'].setValue(response.description);
-          this.creationDate = response.creationDate;
-          this.questionDTOs = response.questions;
-          this.previousRecipients = response.recipientIds;
-        });
-      }
+  ngOnInit() {
+    if (this.surveyId) {
+      console.log("Chargement pour l'enquête #" + this.surveyId);
+      this.initComponent();
+    } else {
+      console.log("Chargement des paramètres de page");
+      // Get the current route and its query parameters
+      this.route.queryParams.pipe(
+        filter(params => params['survey-id'])
+      )
+      .subscribe(params => {
+        // Read the query parameters
+        if (!this.surveyId) {
+          this.surveyId = params['survey-id'];
+        }
+        this.recipientId = params['recipient-id'];
+        this.token = params['token'];
+        console.log('this.surveyId : ' + this.surveyId);
+
+        if (this.surveyId) {
+          this.initComponent();
+        }
+      });
+    }
+  }
+
+  private initComponent() {
+    console.log("Chargement de l'enquête déjà créée");
+    this.surveyService.getSurvey(this.surveyId).subscribe(response => {
+      console.log('Chargement des ' + response.questions.length + " question(s) de l'enquête déjà créée");
+      this.surveyForm.controls['surveyName'].setValue(response.title);
+      this.surveyForm.controls['description'].setValue(response.description);
+      this.creationDate = response.creationDate;
+      this.questionDTOs = response.questions;
+      this.previousRecipients = response.recipientIds;
     });
   }
 
